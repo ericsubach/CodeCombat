@@ -33,6 +33,36 @@ this.wait();
 
 //==============================================================================
 
+// all of my functions are based with the grid (0, 0) based in the upper-left and increasing right/down.
+
+function findLargestRectangleFromAnchorPoint(aGrid, aAnchorPoint)
+{
+   tCardinalWallsArray = findNearestWallsInAllDirections(aGrid, aAnchorPoint);
+   tNorth = tCardinalWallsArray[0];
+   tSouth = tCardinalWallsArray[1];
+   tWest  = tCardinalWallsArray[2];
+   tEast  = tCardinalWallsArray[3];
+
+   tQuadrant1 = new Quadrant(aAnchorPoint, new Point(tEast.x, tNorth.y));
+   tQuadrant2 = new Quadrant(aAnchorPoint, new Point(tEast.x, tSouth.y));
+   tQuadrant3 = new Quadrant(aAnchorPoint, new Point(tWest.x, tSouth.y));
+   tQuadrant4 = new Quadrant(aAnchorPoint, new Point(tWest.x, tNorth.y));
+   
+   tQuadrant1Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant1.otherVertexPoint,  1,  1, max);
+   
+   // TODO Try combining rectangles.
+}
+
+function largestCombinedRectangleHorizontalEdge(aRectangleNorth, aRectangleSouth)
+{
+
+}
+
+function largestCombinedRectangleVerticalEdge(aRectangleWest, aRectangleEast)
+{
+
+}
+
 function findNearestWallsInAllDirections(aGrid, aAnchorPoint)
 {
    tNorth = findNearestWallInDirection(aGrid, aAnchorPoint,  0, -1);
@@ -55,6 +85,7 @@ function findNearestWallInDirection(aGrid, aAnchorPoint, aHorizontalIncrement, a
         !isWall(tX, tY);
         tX += aHorizontalIncrement, tY += aVerticalIncrement)
    {
+      // Do nothing.
    }
    
    return new Point(tX, tY);
@@ -124,6 +155,15 @@ function Rectangle()
    this.y = 0;
    this.width = 0;
    this.height = 0;
+}
+
+/**
+ * Quadrant class.
+ */
+function Quadrant(aAnchorPoint, aOtherVertexPoint)
+{
+   this.anchorPoint      = aAnchorPoint;
+   this.otherVertexPoint = aOtherVertexPoint;
 }
 
 tRect = new Rectangle();

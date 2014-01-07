@@ -1,3 +1,7 @@
+/*
+ * http://codecombat.com/play/level/gridmancer#
+ */
+
 // Fill the empty space with the minimum number of rectangles.
 // (Rectangles should not overlap each other or walls.)
 // The grid size is 1 meter, but the smallest wall/floor tile is 4 meters.
@@ -11,30 +15,40 @@
 var kGrid = this.getNavGrid().grid;
 var kTileSize = 4;
 
-for (var y = 0; y + kTileSize < kGrid.length; y += kTileSize)
+for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
 {
-   for (var x = 0; x + kTileSize < kGrid[0].length; x += kTileSize)
+   for (var tX = 0; tX + kTileSize < kGrid[0].length; tX += kTileSize)
    {
-      var occupied = kGrid[y][x].length > 0;
-      if (!occupied)
+      var tOccupied = kGrid[tY][tX].length > 0;
+      
+      if (!tOccupied)
       {
          //this.addRect(x + kTileSize / 2, y + kTileSize / 2, kTileSize, kTileSize);
-         //this.say("current tile xy is (" + x + "," + y + ")");
-         //this.wait();  // Hover over the timeline to help debug!
-         
          findLargestRect(x, y);
+         
+         tAnchorPoint = new Point(x, y);
+         tLargestRectangle = findLargestRectangleFromAnchorPoint(kGrid, tAnchorPoint);
       }
    }
 }
-this.say("(0,0) = " + kGrid[11][4].length);
-this.wait();
-this.say("(2,2) = " + kGrid[12][4].length);
-this.wait();
+
+//this.say("(0,0) = " + kGrid[11][4].length);
+//this.wait();
+//this.say("(2,2) = " + kGrid[12][4].length);
+//this.wait();
 
 //==============================================================================
 
 // all of my functions are based with the grid (0, 0) based in the upper-left and increasing right/down.
 
+// avoids giving a rectangle containing taken squares
+// throws exception if anchor point is taken
+function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aAnchorPoint)
+{
+}
+
+
+// doesn't look at if squares are taken by rectangles
 function findLargestRectangleFromAnchorPoint(aGrid, aAnchorPoint)
 {
    tCardinalWallsArray = findNearestWallsInAllDirections(aGrid, aAnchorPoint);
@@ -52,15 +66,41 @@ function findLargestRectangleFromAnchorPoint(aGrid, aAnchorPoint)
    tQuadrant2Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant2.otherVertexPoint,  1,  1, Math.min);
    tQuadrant3Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant3.otherVertexPoint, -1,  1, Math.min);
    tQuadrant4Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
-   // TODO Try combining rectangles.
+   
+   tRect1And2 = largestCombinedRectangleHorizontalEdge(tQuadrant1Rects, tQuadrant2Rects);
+   tRect2And3 = largestCombinedRectangleVerticalEdge(tQuadrant3Rects, tQuadrant2Rects);
+   tRect3And4 = largestCombinedRectangleHorizontalEdge(tQuadrant4Rects, tQuadrant3Rects);
+   tRect4And1 = largestCombinedRectangleVerticalEdge(tQuadrant4Rects, tQuadrant1Rects);
+   
+   tCombinedRectsArray = new Array(tRect1And2, tRect2And3, tRect3And4, tRect4And1);
+   tMaxAreaRectangle = maxAreaRectangle(tCombinedRectsArray);
+   
+   return tMaxAreaRectangle;
 }
 
-function largestCombinedRectangleHorizontalEdge(aRectangleNorth, aRectangleSouth)
+function maxAreaRectangle(aRectanglesArray)
+{
+   tMaxAreaRectangle = null;
+   tMaxArea = -1;
+   
+   for (tIdx = 0; tIdx < aRectanglesArray.length; tIdx++)
+   {
+      if (aRectanglesArray[tIdx].area() > tMaxArea)
+      {
+         tMaxAreaRectangle = aRectanglesArray[tIdx];
+         tMaxArea = aRectanglesArray[tIdx].area();
+      }
+   }
+   
+   return tMaxAreaRectangle;
+}
+
+function largestCombinedRectangleHorizontalEdge(aRectanglesNorth, aRectanglesSouth)
 {
 
 }
 
-function largestCombinedRectangleVerticalEdge(aRectangleWest, aRectangleEast)
+function largestCombinedRectangleVerticalEdge(aRectanglesWest, aRectanglesEast)
 {
 
 }
@@ -137,6 +177,10 @@ function isNotTakenByRectangle(aGrid, aX, aY)
 
 // not wall and not taken
 //function isFree
+function isNotWallAndNotTakenByRectangle(aGrid, aX, aY)
+{
+   return (!isWall(aGrid, aX, aY) && isNotTakenByRectangle(aGrid, aX, aY));
+}
 
 //==============================================================================
 

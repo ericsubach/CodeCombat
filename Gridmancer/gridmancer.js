@@ -48,8 +48,10 @@ function findLargestRectangleFromAnchorPoint(aGrid, aAnchorPoint)
    tQuadrant3 = new Quadrant(aAnchorPoint, new Point(tWest.x, tSouth.y));
    tQuadrant4 = new Quadrant(aAnchorPoint, new Point(tWest.x, tNorth.y));
    
-   tQuadrant1Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant1.otherVertexPoint,  1,  1, max);
-   
+   tQuadrant1Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant1.otherVertexPoint,  1, -1, Math.max);
+   tQuadrant2Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant2.otherVertexPoint,  1,  1, Math.min);
+   tQuadrant3Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant3.otherVertexPoint, -1,  1, Math.min);
+   tQuadrant4Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
    // TODO Try combining rectangles.
 }
 
@@ -115,6 +117,7 @@ function findAllRectsInQuadrant(aGrid, aAnchorPoint, aOtherVertexPoint, aSweepHo
       }
       
       // FIXME obo ?
+      // FIXME constructor args vs. what is passed here. they differ
       tRectangle = new Rectangle(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
       tRectangles.add(tRectangle);
    }
@@ -155,6 +158,11 @@ function Rectangle()
    this.y = 0;
    this.width = 0;
    this.height = 0;
+   
+   this.area = function()
+   {
+      return (this.width * this.height);
+   };
 }
 
 /**

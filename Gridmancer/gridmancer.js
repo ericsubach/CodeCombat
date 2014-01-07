@@ -28,14 +28,22 @@ for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
       
       if (tNotOccupied)
       {
-         //this.addRect(x + kTileSize / 2, y + kTileSize / 2, kTileSize, kTileSize);
-         findLargestRect(x, y);
-         
          tAnchorPoint = new Point(x, y);
-         tLargestRectangle = findLargestRectangleFromAnchorPoint(kGrid, tAnchorPoint);
+         try
+         {
+            tLargestRectangle = findLargestRectangleFromAnchorPoint(kGrid, tAnchorPoint);
+         }
+         catch()
+         {
+            // TODO
+         }
       }
    }
 }
+
+// At this point the entire grid should be filled with rectangles.
+
+//==============================================================================
 
 //this.say("(0,0) = " + kGrid[11][4].length);
 //this.wait();
@@ -59,6 +67,7 @@ function myAddRectangle(aRectangles, aRectangle)
 // throws exception if anchor point is taken
 function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aAnchorPoint)
 {
+   throw new Exception("unimplemented");
 }
 
 
@@ -200,9 +209,9 @@ function isNotTakenByRectangle(aRectangles, aX, aY)
 
 // not wall and not taken
 //function isFree
-function isNotWallAndNotTakenByRectangle(aGrid, aX, aY)
+function isNotWallAndNotTakenByRectangle(aGrid, aRectangles, aX, aY)
 {
-   return (!isWall(aGrid, aX, aY) && isNotTakenByRectangle(aGrid, aX, aY));
+   return (!isWall(aGrid, aX, aY) && isNotTakenByRectangle(aRectangles, aX, aY));
 }
 
 //==============================================================================

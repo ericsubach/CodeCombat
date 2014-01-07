@@ -33,7 +33,92 @@ this.wait();
 
 //==============================================================================
 
-function Rectangle ()
+function findNearestWallsInAllDirections(aGrid, aAnchorPoint)
+{
+   tNorth = findNearestWallInDirection(aGrid, aAnchorPoint,  0, -1);
+   tSouth = findNearestWallInDirection(aGrid, aAnchorPoint,  0,  1);
+   tWest  = findNearestWallInDirection(aGrid, aAnchorPoint, -1,  0);
+   tEast  = findNearestWallInDirection(aGrid, aAnchorPoint,  1,  0);
+   
+   tArray = new Array();
+   tArray.push(tNorth);
+   tArray.push(tSouth);
+   tArray.push(tWest);
+   tArray.push(tEast);
+   
+   return tArray;
+}
+
+function findNearestWallInDirection(aGrid, aAnchorPoint, aHorizontalIncrement, aVerticalIncrement)
+{
+   for (tX = aAnchorPoint.x, tY = aAnchorPoint.y;
+        !isWall(tX, tY);
+        tX += aHorizontalIncrement, tY += aVerticalIncrement)
+   {
+   }
+   
+   return new Point(tX, tY);
+}
+
+// not optimized for speed
+// optimized for largest rectangle
+function findAllRectsInQuadrant(aGrid, aAnchorPoint, aOtherVertexPoint, aSweepHorizontal, aSweepVertical, aVerticalMinOrMaxFunction)
+{
+   if (isWall(aAnchorPoint.x, aAnchorPoint.y))
+   {
+      throw new Exception("Anchor point must not be a wall.")
+   }
+
+   tVerticalMinOrMaxSoFar = aOtherVertexPoint.y + aSweepVertical; // FIXME this plus part?
+   tRectangles = new Array();
+   
+   for (tX = aAnchorPoint.x; tX != aOtherVertexPoint.x; tX += aSweepHorizontal)
+   {
+      for (tY = aAnchorPoint.y; tY != aOtherVertexPoint.y; tY += aSweepVertical)
+      {
+         if (isWall(aGrid, tX, tY))
+         {
+            tVerticalMinOrMaxSoFar = aVerticalMinOrMaxFunction(tVerticalMinOrMaxSoFar, tY);
+            break;
+         }
+      }
+      
+      // FIXME obo ?
+      tRectangle = new Rectangle(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
+      tRectangles.add(tRectangle);
+   }
+   
+   return tRectangles;
+}
+
+function isWall(aGrid, aX, aY)
+{
+   return (aGrid[tY][tX].length == 1);
+}
+
+function isNotTakenByRectangle(aGrid, aX, aY)
+{
+   throw new Exception("Unimplemented");
+}
+
+// not wall and not taken
+//function isFree
+
+//==============================================================================
+
+/**
+ * Point class.
+ */
+function Point(aX, aY)
+{
+   this.x = aX;
+   this.y = aY;
+}
+
+/**
+ * Rectangle class.
+ */
+function Rectangle()
 {
    this.x = 0;
    this.y = 0;
@@ -53,6 +138,11 @@ function findLargestRectNoOverlap(aX, aY)
    
    // * find longest in all 4 directions
    // * scale back when scanning in a direction if not all are available or hit a wall
+   
+   /*
+   * Find the nearest wall or taken square in each direction
+   * Go across each 
+   */
 }
 
 // grid starts at lower left 0-based index (increase as go up/right)

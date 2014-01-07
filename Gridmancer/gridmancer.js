@@ -2,6 +2,9 @@
  * http://codecombat.com/play/level/gridmancer#
  */
 
+// should work for the example level but may fail if the level is not aligned
+// to a 4x4 grid style.
+ 
 // Fill the empty space with the minimum number of rectangles.
 // (Rectangles should not overlap each other or walls.)
 // The grid size is 1 meter, but the smallest wall/floor tile is 4 meters.
@@ -12,16 +15,18 @@
 // Just include your multiplayer link in the contact email.
 // Make sure to sign up on the home page to save your code.
 
-var kGrid = this.getNavGrid().grid;
-var kTileSize = 4;
+var kGrid       = this.getNavGrid().grid;
+var kRectangles = new Array();
+var kTileSize   = 4;
 
 for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
 {
    for (var tX = 0; tX + kTileSize < kGrid[0].length; tX += kTileSize)
    {
-      var tOccupied = kGrid[tY][tX].length > 0;
+      var tNotOccupied = isNotWallAndNotTakenByRectangle(kGrid, tX, tY)
+      kGrid[tY][tX].length > 0;
       
-      if (!tOccupied)
+      if (tNotOccupied)
       {
          //this.addRect(x + kTileSize / 2, y + kTileSize / 2, kTileSize, kTileSize);
          findLargestRect(x, y);
@@ -40,6 +45,15 @@ for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
 //==============================================================================
 
 // all of my functions are based with the grid (0, 0) based in the upper-left and increasing right/down.
+
+function myAddRectangle(aRectangles, aRectangle)
+{
+   this.addRect(aRectangle.x + (aRectangle.width / 2),
+                aRectangle.y + (aRectangle.height / 2),
+                aRectangle.width,
+                aRectangle.height);
+   aRectangles.push(aRectangle);
+}
 
 // avoids giving a rectangle containing taken squares
 // throws exception if anchor point is taken
@@ -170,9 +184,18 @@ function isWall(aGrid, aX, aY)
    return (aGrid[tY][tX].length == 1);
 }
 
-function isNotTakenByRectangle(aGrid, aX, aY)
+function isNotTakenByRectangle(aRectangles, aX, aY)
 {
-   throw new Exception("Unimplemented");
+   //throw new Exception("Unimplemented");
+   for (tIdx = 0; tIdx < aRectangles.length; tIdx++)
+   {
+      if (aRectangles[tIdx].contains(aX, aY))
+      {
+         return false;
+      }
+   }
+   
+   return true;
 }
 
 // not wall and not taken
@@ -206,6 +229,12 @@ function Rectangle()
    this.area = function()
    {
       return (this.width * this.height);
+   };
+   
+   this.contains = function(aX, aY)
+   {
+      return (this.x < aX && aX < (this.x + this.width) &&
+              this.y < aY && aY < (this.y + this.height));
    };
 }
 

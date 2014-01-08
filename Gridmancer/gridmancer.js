@@ -4,6 +4,7 @@
 
 // should work for the example level but may fail if the level is not aligned
 // to a 4x4 grid style.
+// assumption: bounded by a wall on all sides, otherwise out-of-bounds errors will occur
  
 // Fill the empty space with the minimum number of rectangles.
 // (Rectangles should not overlap each other or walls.)
@@ -31,7 +32,7 @@ for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
          tAnchorPoint = new Point(x, y);
          try
          {
-            tLargestRectangle = findLargestRectangleFromAnchorPoint(kGrid, tAnchorPoint);
+            tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, aRectangles, tAnchorPoint);
          }
          catch()
          {
@@ -65,9 +66,33 @@ function myAddRectangle(aRectangles, aRectangle)
 
 // avoids giving a rectangle containing taken squares
 // throws exception if anchor point is taken
-function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aAnchorPoint)
+function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnchorPoint)
 {
-   throw new Exception("unimplemented");
+   tCardinalCollisionsArray = findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPoint);
+   tNorth = tCardinalCollisionsArray[0];
+   tSouth = tCardinalCollisionsArray[1];
+   tWest  = tCardinalCollisionsArray[2];
+   tEast  = tCardinalCollisionsArray[3];
+
+   tQuadrant1 = new Quadrant(aAnchorPoint, new Point(tEast.x, tNorth.y));
+   tQuadrant2 = new Quadrant(aAnchorPoint, new Point(tEast.x, tSouth.y));
+   tQuadrant3 = new Quadrant(aAnchorPoint, new Point(tWest.x, tSouth.y));
+   tQuadrant4 = new Quadrant(aAnchorPoint, new Point(tWest.x, tNorth.y));
+   
+   tQuadrant1Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant1.otherVertexPoint,  1, -1, Math.max);
+   tQuadrant2Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant2.otherVertexPoint,  1,  1, Math.min);
+   tQuadrant3Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant3.otherVertexPoint, -1,  1, Math.min);
+   tQuadrant4Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
+   
+   tRect1And2 = largestCombinedRectangleQuadrant1And2(tQuadrant1Rects, tQuadrant2Rects);
+   tRect2And3 = largestCombinedRectangleQuadrant2And3(tQuadrant3Rects, tQuadrant2Rects);
+   tRect3And4 = largestCombinedRectangleQuadrant3And4(tQuadrant4Rects, tQuadrant3Rects);
+   tRect4And1 = largestCombinedRectangleQuadrant1And4(tQuadrant4Rects, tQuadrant1Rects);
+   
+   tCombinedRectsArray = new Array(tRect1And2, tRect2And3, tRect3And4, tRect4And1);
+   tMaxAreaRectangle = maxAreaRectangle(tCombinedRectsArray);
+   
+   return tMaxAreaRectangle;
 }
 
 
@@ -118,14 +143,67 @@ function maxAreaRectangle(aRectanglesArray)
    return tMaxAreaRectangle;
 }
 
-function largestCombinedRectangleHorizontalEdge(aRectanglesNorth, aRectanglesSouth)
+// relies on the fact that the anchor point is shared to work correctly
+function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectanglesQuadrant2)
+{
+   tPotentialRectangles = new Array();
+
+   /*
+    * Ignore this, I found a different way.
+    *
+    * There is exactly 3 possibilities and exactly one solution.
+    * 1) Quadrant1 rectangle
+    * 2) Quadrant2 rectangle
+    * 3) Largest vertical-combined portion, which can be calculated O(1)
+    */
+   
+   /*
+    * Try all combinations of rectangles from each quadrant whose x values align,
+    * then choose the largest one.
+    */
+   for (tI = 0; tI < aRectanglesQuadrant1.length; tI++)
+   {
+      tFirst = aRectanglesQuadrant1[tI];
+      for (tJ = 0; tJ < aRectanglesQuadrant2.length; tJ++)
+      {
+         tSecond = aRectanglesQuadrant2[tJ];
+         if (tFirst.x2 == tSecond.x2)
+         {
+            // top-left to bottom-right
+            tTestRectangle = new Rectangle(tFirst.x1, tFirst.y2, tSecond.x2, tSecond.y2);
+            tPotentialRectangles.push(tTestRectangle);
+         }
+      }
+   }
+   
+   return maxAreaRectangle(aRectanglesArray);
+}
+
+//function largestCombinedRectangleQuadrant1And2(aRectanglesNorth, aRectanglesSouth)
+//{
+//
+//}
+
+// relies on the fact that the anchor point is shared to work correctly
+function largestCombinedRectangleVerticalEdge(aRectanglesWest, aRectanglesEast)
 {
 
 }
 
-function largestCombinedRectangleVerticalEdge(aRectanglesWest, aRectanglesEast)
+function findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPoint)
 {
-
+   tNorth = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint,  0, -1);
+   tSouth = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint,  0,  1);
+   tWest  = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint, -1,  0);
+   tEast  = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint,  1,  0);
+   
+   tArray = new Array();
+   tArray.push(tNorth);
+   tArray.push(tSouth);
+   tArray.push(tWest);
+   tArray.push(tEast);
+   
+   return tArray;
 }
 
 function findNearestWallsInAllDirections(aGrid, aAnchorPoint)
@@ -144,6 +222,18 @@ function findNearestWallsInAllDirections(aGrid, aAnchorPoint)
    return tArray;
 }
 
+function findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint, aHorizontalIncrement, aVerticalIncrement)
+{
+   for (tX = aAnchorPoint.x, tY = aAnchorPoint.y;
+        !isWall(aGrid, tX, tY) && isNotTakenByRectangle(aRectangles, tX, tY);
+        tX += aHorizontalIncrement, tY += aVerticalIncrement)
+   {
+      // Do nothing.
+   }
+   
+   return new Point(tX, tY);
+}
+
 function findNearestWallInDirection(aGrid, aAnchorPoint, aHorizontalIncrement, aVerticalIncrement)
 {
    for (tX = aAnchorPoint.x, tY = aAnchorPoint.y;
@@ -154,6 +244,38 @@ function findNearestWallInDirection(aGrid, aAnchorPoint, aHorizontalIncrement, a
    }
    
    return new Point(tX, tY);
+}
+
+// not optimized for speed
+// optimized for largest rectangle
+function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOtherVertexPoint, aSweepHorizontal, aSweepVertical, aVerticalMinOrMaxFunction)
+{
+   if (isWall(aAnchorPoint.x, aAnchorPoint.y) || !isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y))
+   {
+      throw new Exception("Anchor point must not be a wall.")
+   }
+
+   tVerticalMinOrMaxSoFar = aOtherVertexPoint.y + aSweepVertical; // FIXME this plus part?
+   tRectangles = new Array();
+   
+   for (tX = aAnchorPoint.x; tX != aOtherVertexPoint.x; tX += aSweepHorizontal)
+   {
+      for (tY = aAnchorPoint.y; tY != aOtherVertexPoint.y; tY += aSweepVertical)
+      {
+         if (isWall(aGrid, tX, tY) || !isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y))
+         {
+            tVerticalMinOrMaxSoFar = aVerticalMinOrMaxFunction(tVerticalMinOrMaxSoFar, tY);
+            break;
+         }
+      }
+      
+      // FIXME obo ?
+      // FIXME constructor args vs. what is passed here. they differ
+      tRectangle = new Rectangle(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
+      tRectangles.add(tRectangle);
+   }
+   
+   return tRectangles;
 }
 
 // not optimized for speed
@@ -228,12 +350,19 @@ function Point(aX, aY)
 /**
  * Rectangle class.
  */
-function Rectangle()
+function Rectangle(aX1, aY1, aX2, aY2)
 {
-   this.x = 0;
-   this.y = 0;
-   this.width = 0;
-   this.height = 0;
+   this.x = aX1;
+   this.y = aY1;
+   
+   this.x2 = aX2;
+   this.y2 = aY2;
+   
+   this.width = this.x2 - this.x;
+   this.height = this.y2 - this.y;
+   
+   //this.x2 = this.x + this.width;
+   //this.y2 = this.y + this.height;
    
    this.area = function()
    {
@@ -244,6 +373,16 @@ function Rectangle()
    {
       return (this.x < aX && aX < (this.x + this.width) &&
               this.y < aY && aY < (this.y + this.height));
+   };
+
+   this.containsPoint = function(aPoint)
+   {
+      return this.contains(aPoint.x, aPoint.y);
+   };
+   
+   this.toString = function()
+   {
+      return '[(' + this.x + ', ' + this.y + '), ' + '(' + this.x2 + ', ' + this.y2 + ')]';
    };
 }
 

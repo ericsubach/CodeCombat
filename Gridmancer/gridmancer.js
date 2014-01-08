@@ -345,6 +345,11 @@ function Point(aX, aY)
 {
    this.x = aX;
    this.y = aY;
+   
+   this.toString = function ()
+   {
+      return '(' + this.x + ', ' + this.y + ')';
+   };
 }
 
 /**

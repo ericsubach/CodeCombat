@@ -175,16 +175,9 @@ function maxAreaRectangle(aRectanglesArray)
 function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectanglesQuadrant2)
 {
    tPotentialRectangles = new Array();
-
-   /*
-    * Ignore this, I found a different way.
-    *
-    * There is exactly 3 possibilities and exactly one solution.
-    * 1) Quadrant1 rectangle
-    * 2) Quadrant2 rectangle
-    * 3) Largest vertical-combined portion, which can be calculated O(1)
-    */
    
+   // TODO add each of the individual rectangles as well
+
    /*
     * Try all combinations of rectangles from each quadrant whose x values align,
     * then choose the largest one.
@@ -204,13 +197,14 @@ function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectangles
       }
    }
    
-   return maxAreaRectangle(aRectanglesArray);
+   return maxAreaRectangle(tPotentialRectangles);
 }
 
-//function largestCombinedRectangleQuadrant1And2(aRectanglesNorth, aRectanglesSouth)
-//{
-//
-//}
+
+function largestCombinedRectangleQuadrant2And3(aRectanglesQuadrant2, aRectanglesQuadrant3)
+{
+
+}
 
 
 /*

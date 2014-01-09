@@ -67,28 +67,47 @@ function getGrid()
    }
 }
 
+function writeDebug(aString)
+{
+   if (kIsTest)
+   {
+      document.write(aString + '<br />');
+   }
+   else
+   {
+      // Do nothing.
+   }
+}
+
 //==============================================================================
 
 var kGrid       = getGrid();
 var kRectangles = new Array();
-var kTileSize   = 4;
+var kTileSize   = 1;
+var kIncrement  = 0;
 
-for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
+writeDebug(kGrid.length);
+writeDebug(kGrid[0].length);
+
+for (var tY = 0; tY + kIncrement < kGrid.length; tY += kTileSize)
 {
-   for (var tX = 0; tX + kTileSize < kGrid[0].length; tX += kTileSize)
+   for (var tX = 0; tX + kIncrement < kGrid[0].length; tX += kTileSize)
    {
+      writeDebug('Checking point = ' + new Point(tX, tY));
       var tNotOccupied = isNotWallAndNotTakenByRectangle(kGrid, tX, tY);
       
       if (tNotOccupied)
       {
          tAnchorPoint = new Point(tX, tY);
+         writeDebug('Point is not occupied: ' + tAnchorPoint);
+
          try
          {
-            tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, aRectangles, tAnchorPoint);
+            tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, kRectangles, tAnchorPoint);
 
             if (tLargestRectangle)
             {
-               myAddRectangle(aRectangles, tLargestRectangle);
+               myAddRectangle(kRectangles, tLargestRectangle);
             }
          }
          catch (aException)
@@ -101,10 +120,14 @@ for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
 
 // At this point the entire grid should be filled with rectangles.
 
+writeDebug('===================================');
+writeDebug('There are ' + kRectangles.length + ' rectangles = ' + kRectangles);
+
 //==============================================================================
 
 function myAddRectangle(aRectangles, aRectangle)
 {
+   writeDebug('Adding rectangle = ' + aRectangle);
    this.addRect(aRectangle.x + (aRectangle.width / 2),
                 aRectangle.y + (aRectangle.height / 2),
                 aRectangle.width,

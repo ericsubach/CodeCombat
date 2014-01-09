@@ -44,7 +44,32 @@
  * Make sure to sign up on the home page to save your code.
  */
 
-var kGrid       = this.getNavGrid().grid;
+//==============================================================================
+
+// Test data
+var kIsTest = true;
+
+function getGrid()
+{
+   if (kIsTest)
+   {
+      return [
+             [[1], [1], [1], [1], [1]],
+             [[1],  [],  [],  [], [1]],
+             [[1],  [],  [],  [], [1]],
+             [[1],  [],  [],  [], [1]],
+             [[1], [1], [1], [1], [1]]
+             ];
+   }
+   else
+   {
+      return this.getNavGrid().grid;
+   }
+}
+
+//==============================================================================
+
+var kGrid       = getGrid();
 var kRectangles = new Array();
 var kTileSize   = 4;
 

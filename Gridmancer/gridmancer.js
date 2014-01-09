@@ -404,6 +404,7 @@ function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOth
       
       // FIXME obo ?
       // FIXME constructor args vs. what is passed here. they differ
+
       tRectangle = new Rectangle(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
       tRectangles.add(tRectangle);
    }
@@ -437,8 +438,8 @@ function findAllRectsInQuadrant(aGrid, aAnchorPoint, aOtherVertexPoint, aSweepHo
       }
       
       // FIXME obo ?
-      // FIXME constructor args vs. what is passed here. they differ
-      tRectangle = new Rectangle(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
+      //tRectangle = new Rectangle(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
+      tRectangle = rectangleFromAnchorPointToOtherPoint(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
       tRectangles.add(tRectangle);
    }
    
@@ -536,4 +537,35 @@ function Quadrant(aAnchorPoint, aOtherVertexPoint)
 {
    this.anchorPoint      = aAnchorPoint;
    this.otherVertexPoint = aOtherVertexPoint;
+}
+
+
+function rectangleFromAnchorPointToOtherPoint(aAnchorPointX, aAnchorPointY, aOtherPointX, aOtherPointY)
+{
+   // Create a rectangle with the given two points so that the first point is the top-left corner.
+
+   if (aAnchorPointX < aOtherPointX)
+   {
+      if (aAnchorPointY < aOtherPointY)
+      {
+         return new Rectangle(aAnchorPointX, aAnchorPointY, aOtherPointX, aOtherPointY);
+      }
+      else
+      {
+         return new Rectangle(aAnchorPointX, aOtherPointY, aOtherPointX, aAnchorPointY);
+      }
+   }
+   else
+   {
+      if (aAnchorPointY < aOtherPointY)
+      {
+         return new Rectangle(aOtherPointX, aAnchorPointY, aAnchorPointX, aOtherPointY);
+      }
+      else
+      {
+         return new Rectangle(aOtherPointX, aOtherPointY, aAnchorPointX, aAnchorPointY);
+      }
+   }
+
+   // FIXME maybe some weird circumstances to watch out for
 }

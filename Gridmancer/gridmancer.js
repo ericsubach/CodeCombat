@@ -81,7 +81,7 @@ for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
       
       if (tNotOccupied)
       {
-         tAnchorPoint = new Point(x, y);
+         tAnchorPoint = new Point(tX, tY);
          try
          {
             tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, aRectangles, tAnchorPoint);

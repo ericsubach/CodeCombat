@@ -2,6 +2,15 @@
  * http://codecombat.com/play/level/gridmancer#
  */
 
+//==============================================================================
+
+//this.say("(0,0) = " + kGrid[11][4].length);
+//this.wait();
+//this.say("(2,2) = " + kGrid[12][4].length);
+//this.wait();
+
+//==============================================================================
+
 // should work for the example level but may fail if the level is not aligned
 // to a 4x4 grid style.
 // assumption: bounded by a wall on all sides, otherwise out-of-bounds errors will occur
@@ -34,7 +43,7 @@ for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
          {
             tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, aRectangles, tAnchorPoint);
          }
-         catch()
+         catch (aException)
          {
             // TODO
          }
@@ -43,13 +52,6 @@ for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
 }
 
 // At this point the entire grid should be filled with rectangles.
-
-//==============================================================================
-
-//this.say("(0,0) = " + kGrid[11][4].length);
-//this.wait();
-//this.say("(2,2) = " + kGrid[12][4].length);
-//this.wait();
 
 //==============================================================================
 
@@ -63,6 +65,7 @@ function myAddRectangle(aRectangles, aRectangle)
                 aRectangle.height);
    aRectangles.push(aRectangle);
 }
+
 
 // avoids giving a rectangle containing taken squares
 // throws exception if anchor point is taken
@@ -126,6 +129,7 @@ function findLargestRectangleFromAnchorPoint(aGrid, aAnchorPoint)
    return tMaxAreaRectangle;
 }
 
+
 function maxAreaRectangle(aRectanglesArray)
 {
    tMaxAreaRectangle = null;
@@ -142,6 +146,7 @@ function maxAreaRectangle(aRectanglesArray)
    
    return tMaxAreaRectangle;
 }
+
 
 // relies on the fact that the anchor point is shared to work correctly
 function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectanglesQuadrant2)
@@ -184,11 +189,13 @@ function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectangles
 //
 //}
 
+
 // relies on the fact that the anchor point is shared to work correctly
 function largestCombinedRectangleVerticalEdge(aRectanglesWest, aRectanglesEast)
 {
 
 }
+
 
 function findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPoint)
 {
@@ -206,6 +213,7 @@ function findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPo
    return tArray;
 }
 
+
 function findNearestWallsInAllDirections(aGrid, aAnchorPoint)
 {
    tNorth = findNearestWallInDirection(aGrid, aAnchorPoint,  0, -1);
@@ -222,6 +230,7 @@ function findNearestWallsInAllDirections(aGrid, aAnchorPoint)
    return tArray;
 }
 
+
 function findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint, aHorizontalIncrement, aVerticalIncrement)
 {
    for (tX = aAnchorPoint.x, tY = aAnchorPoint.y;
@@ -234,6 +243,7 @@ function findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint, 
    return new Point(tX, tY);
 }
 
+
 function findNearestWallInDirection(aGrid, aAnchorPoint, aHorizontalIncrement, aVerticalIncrement)
 {
    for (tX = aAnchorPoint.x, tY = aAnchorPoint.y;
@@ -245,6 +255,7 @@ function findNearestWallInDirection(aGrid, aAnchorPoint, aHorizontalIncrement, a
    
    return new Point(tX, tY);
 }
+
 
 // not optimized for speed
 // optimized for largest rectangle
@@ -278,6 +289,7 @@ function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOth
    return tRectangles;
 }
 
+
 // not optimized for speed
 // optimized for largest rectangle
 function findAllRectsInQuadrant(aGrid, aAnchorPoint, aOtherVertexPoint, aSweepHorizontal, aSweepVertical, aVerticalMinOrMaxFunction)
@@ -310,10 +322,12 @@ function findAllRectsInQuadrant(aGrid, aAnchorPoint, aOtherVertexPoint, aSweepHo
    return tRectangles;
 }
 
+
 function isWall(aGrid, aX, aY)
 {
    return (aGrid[tY][tX].length == 1);
 }
+
 
 function isNotTakenByRectangle(aRectangles, aX, aY)
 {
@@ -328,6 +342,7 @@ function isNotTakenByRectangle(aRectangles, aX, aY)
    
    return true;
 }
+
 
 // not wall and not taken
 //function isFree
@@ -351,6 +366,7 @@ function Point(aX, aY)
       return '(' + this.x + ', ' + this.y + ')';
    };
 }
+
 
 /**
  * Rectangle class.
@@ -391,6 +407,7 @@ function Rectangle(aX1, aY1, aX2, aY2)
    };
 }
 
+
 /**
  * Quadrant class.
  */
@@ -400,39 +417,16 @@ function Quadrant(aAnchorPoint, aOtherVertexPoint)
    this.otherVertexPoint = aOtherVertexPoint;
 }
 
-tRect = new Rectangle();
-tRect.x = 2;
+/*
+* grid starts at lower left 0-based index (increase as go up/right)
+* grid represents where walls are
+* 0 = no wall
+* 1 = wall
 
-// * simple solver
-// * fewest rectangles solver
-
-function findLargestRectNoOverlap(aX, aY)
-{
-   //kGrid
-   
-   // * find longest in all 4 directions
-   // * scale back when scanning in a direction if not all are available or hit a wall
-   
-   /*
-   * Find the nearest wall or taken square in each direction
-   * Go across each 
-   */
-}
-
-// grid starts at lower left 0-based index (increase as go up/right)
-// grid represents where walls are
-// 0 = no wall
-// 1 = wall
-
-// simple solution
-//================
-// * do a cross and find largest section from the current position that is rectangle and open
-// * skip already taken squares
-
-// complex solution
-//=================
-// * do the cross
-// * consider each rectangle, regardless of whether already taken
-// * find each rectangle this new one overlaps.
-// * find the new way to break this up
-// * if the resulting number of rectangles is smaller, choose this new solution
+# complex solution
+* do the cross
+* consider each rectangle, regardless of whether already taken
+* find each rectangle this new one overlaps.
+* find the new way to break this up
+* if the resulting number of rectangles is smaller, choose this new solution
+*/

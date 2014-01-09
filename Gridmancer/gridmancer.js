@@ -52,8 +52,7 @@ for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
 {
    for (var tX = 0; tX + kTileSize < kGrid[0].length; tX += kTileSize)
    {
-      var tNotOccupied = isNotWallAndNotTakenByRectangle(kGrid, tX, tY)
-      kGrid[tY][tX].length > 0;
+      var tNotOccupied = isNotWallAndNotTakenByRectangle(kGrid, tX, tY);
       
       if (tNotOccupied)
       {

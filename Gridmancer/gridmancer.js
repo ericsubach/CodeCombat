@@ -107,9 +107,9 @@ function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnch
    tQuadrant4Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
    
    tRect1And2 = largestCombinedRectangleQuadrant1And2(tQuadrant1Rects, tQuadrant2Rects);
-   tRect2And3 = largestCombinedRectangleQuadrant2And3(tQuadrant3Rects, tQuadrant2Rects);
-   tRect3And4 = largestCombinedRectangleQuadrant3And4(tQuadrant4Rects, tQuadrant3Rects);
-   tRect4And1 = largestCombinedRectangleQuadrant1And4(tQuadrant4Rects, tQuadrant1Rects);
+   tRect2And3 = largestCombinedRectangleQuadrant2And3(tQuadrant2Rects, tQuadrant3Rects);
+   tRect3And4 = largestCombinedRectangleQuadrant3And4(tQuadrant3Rects, tQuadrant4Rects);
+   tRect4And1 = largestCombinedRectangleQuadrant1And4(tQuadrant1Rects, tQuadrant4Rects);
    
    tCombinedRectsArray = new Array(tRect1And2, tRect2And3, tRect3And4, tRect4And1);
    tMaxAreaRectangle = maxAreaRectangle(tCombinedRectsArray);
@@ -161,7 +161,7 @@ function maxAreaRectangle(aRectanglesArray)
       if (aRectanglesArray[tIdx].area() > tMaxArea)
       {
          tMaxAreaRectangle = aRectanglesArray[tIdx];
-         tMaxArea = aRectanglesArray[tIdx].area();
+         tMaxArea = tMaxAreaRectangle.area();
       }
    }
    
@@ -174,9 +174,7 @@ function maxAreaRectangle(aRectanglesArray)
  */
 function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectanglesQuadrant2)
 {
-   tPotentialRectangles = new Array();
-   
-   // TODO add each of the individual rectangles as well
+   tPotentialRectangles = aRectanglesQuadrant1.concat(aRectanglesQuadrant2);
 
    /*
     * Try all combinations of rectangles from each quadrant whose x values align,
@@ -191,7 +189,7 @@ function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectangles
          if (tFirst.x2 == tSecond.x2)
          {
             // top-left to bottom-right
-            tTestRectangle = new Rectangle(tFirst.x1, tFirst.y2, tSecond.x2, tSecond.y2);
+            tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
             tPotentialRectangles.push(tTestRectangle);
          }
       }
@@ -203,7 +201,82 @@ function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectangles
 
 function largestCombinedRectangleQuadrant2And3(aRectanglesQuadrant2, aRectanglesQuadrant3)
 {
+   tPotentialRectangles = aRectanglesQuadrant2.concat(aRectanglesQuadrant3);
 
+   /*
+    * Try all combinations of rectangles from each quadrant whose y values align,
+    * then choose the largest one.
+    */
+   for (tI = 0; tI < aRectanglesQuadrant3.length; tI++)
+   {
+      tFirst = aRectanglesQuadrant3[tI];
+      for (tJ = 0; tJ < aRectanglesQuadrant2.length; tJ++)
+      {
+         tSecond = aRectanglesQuadrant2[tJ];
+         if (tFirst.y2 == tSecond.y2)
+         {
+            // top-left to bottom-right
+            tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
+            tPotentialRectangles.push(tTestRectangle);
+         }
+      }
+   }
+   
+   return maxAreaRectangle(tPotentialRectangles);
+}
+
+
+function largestCombinedRectangleQuadrant3And4(aRectanglesQuadrant3, aRectanglesQuadrant4)
+{
+   tPotentialRectangles = aRectanglesQuadrant3.concat(aRectanglesQuadrant4);
+
+   /*
+    * Try all combinations of rectangles from each quadrant whose x values align,
+    * then choose the largest one.
+    */
+   for (tI = 0; tI < aRectanglesQuadrant4.length; tI++)
+   {
+      tFirst = aRectanglesQuadrant4[tI];
+      for (tJ = 0; tJ < aRectanglesQuadrant3.length; tJ++)
+      {
+         tSecond = aRectanglesQuadrant3[tJ];
+         if (tFirst.x2 == tSecond.x2)
+         {
+            // top-left to bottom-right
+            tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
+            tPotentialRectangles.push(tTestRectangle);
+         }
+      }
+   }
+   
+   return maxAreaRectangle(tPotentialRectangles);
+}
+
+
+function largestCombinedRectangleQuadrant1And4(aRectanglesQuadrant1, aRectanglesQuadrant4)
+{
+   tPotentialRectangles = aRectanglesQuadrant1.concat(aRectanglesQuadrant4);
+
+   /*
+    * Try all combinations of rectangles from each quadrant whose y values align,
+    * then choose the largest one.
+    */
+   for (tI = 0; tI < aRectanglesQuadrant4.length; tI++)
+   {
+      tFirst = aRectanglesQuadrant4[tI];
+      for (tJ = 0; tJ < aRectanglesQuadrant1.length; tJ++)
+      {
+         tSecond = aRectanglesQuadrant1[tJ];
+         if (tFirst.y2 == tSecond.y2)
+         {
+            // top-left to bottom-right
+            tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
+            tPotentialRectangles.push(tTestRectangle);
+         }
+      }
+   }
+   
+   return maxAreaRectangle(tPotentialRectangles);
 }
 
 

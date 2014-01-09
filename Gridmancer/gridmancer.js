@@ -11,9 +11,11 @@
 
 //==============================================================================
 
-// should work for the example level but may fail if the level is not aligned
-// to a 4x4 grid style.
-// assumption: bounded by a wall on all sides, otherwise out-of-bounds errors will occur
+/*
+* should work for the example level but may fail if the level is not aligned to a 4x4 grid style.
+* assumption: bounded by a wall on all sides, otherwise out-of-bounds errors will occur
+* all of my functions are based with the grid (0, 0) based in the upper-left and increasing right/down.
+*/
  
 // Fill the empty space with the minimum number of rectangles.
 // (Rectangles should not overlap each other or walls.)
@@ -54,8 +56,6 @@ for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
 // At this point the entire grid should be filled with rectangles.
 
 //==============================================================================
-
-// all of my functions are based with the grid (0, 0) based in the upper-left and increasing right/down.
 
 function myAddRectangle(aRectangles, aRectangle)
 {

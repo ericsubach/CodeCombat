@@ -2,6 +2,27 @@
  * http://codecombat.com/play/level/gridmancer#
  */
 
+/*
+* grid starts at lower left 0-based index (increase as go up/right)
+* grid represents where walls are
+* 0 = no wall
+* 1 = wall
+
+# complex solution
+* do the cross
+* consider each rectangle, regardless of whether already taken
+* find each rectangle this new one overlaps.
+* find the new way to break this up
+* if the resulting number of rectangles is smaller, choose this new solution
+*/
+
+
+/*
+* should work for the example level but may fail if the level is not aligned to a 4x4 grid style.
+* assumption: bounded by a wall on all sides, otherwise out-of-bounds errors will occur
+* all of my functions are based with the grid (0, 0) based in the upper-left and increasing right/down.
+*/
+
 //==============================================================================
 
 //this.say("(0,0) = " + kGrid[11][4].length);
@@ -12,20 +33,16 @@
 //==============================================================================
 
 /*
-* should work for the example level but may fail if the level is not aligned to a 4x4 grid style.
-* assumption: bounded by a wall on all sides, otherwise out-of-bounds errors will occur
-* all of my functions are based with the grid (0, 0) based in the upper-left and increasing right/down.
-*/
- 
-// Fill the empty space with the minimum number of rectangles.
-// (Rectangles should not overlap each other or walls.)
-// The grid size is 1 meter, but the smallest wall/floor tile is 4 meters.
-// If you can do better than one rectangle for every tile, let us know!
-// We'll help you find a programming job (if you want one).
-// Check the blue guide button at the top for more info.
-// Press Contact below to report success if you want a job!
-// Just include your multiplayer link in the contact email.
-// Make sure to sign up on the home page to save your code.
+ * Fill the empty space with the minimum number of rectangles.
+ * (Rectangles should not overlap each other or walls.)
+ * The grid size is 1 meter, but the smallest wall/floor tile is 4 meters.
+ * If you can do better than one rectangle for every tile, let us know!
+ * We'll help you find a programming job (if you want one).
+ * Check the blue guide button at the top for more info.
+ * Press Contact below to report success if you want a job!
+ * Just include your multiplayer link in the contact email.
+ * Make sure to sign up on the home page to save your code.
+ */
 
 var kGrid       = this.getNavGrid().grid;
 var kRectangles = new Array();
@@ -67,8 +84,10 @@ function myAddRectangle(aRectangles, aRectangle)
 }
 
 
-// avoids giving a rectangle containing taken squares
-// throws exception if anchor point is taken
+/*
+ * * avoids giving a rectangle containing taken squares
+ * * throws exception if anchor point is taken
+ */
 function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnchorPoint)
 {
    tCardinalCollisionsArray = findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPoint);
@@ -99,7 +118,9 @@ function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnch
 }
 
 
-// doesn't look at if squares are taken by rectangles
+/*
+ * doesn't look at if squares are taken by rectangles
+ */
 function findLargestRectangleFromAnchorPoint(aGrid, aAnchorPoint)
 {
    tCardinalWallsArray = findNearestWallsInAllDirections(aGrid, aAnchorPoint);
@@ -148,7 +169,9 @@ function maxAreaRectangle(aRectanglesArray)
 }
 
 
-// relies on the fact that the anchor point is shared to work correctly
+/*
+ * relies on the fact that the anchor point is shared to work correctly
+ */
 function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectanglesQuadrant2)
 {
    tPotentialRectangles = new Array();
@@ -190,7 +213,9 @@ function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectangles
 //}
 
 
-// relies on the fact that the anchor point is shared to work correctly
+/*
+ * relies on the fact that the anchor point is shared to work correctly
+ */
 function largestCombinedRectangleVerticalEdge(aRectanglesWest, aRectanglesEast)
 {
 
@@ -257,8 +282,9 @@ function findNearestWallInDirection(aGrid, aAnchorPoint, aHorizontalIncrement, a
 }
 
 
-// not optimized for speed
-// optimized for largest rectangle
+/*
+ * * not optimized for speed; optimized for largest rectangle
+ */
 function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOtherVertexPoint, aSweepHorizontal, aSweepVertical, aVerticalMinOrMaxFunction)
 {
    if (isWall(aAnchorPoint.x, aAnchorPoint.y) || !isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y))
@@ -290,8 +316,9 @@ function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOth
 }
 
 
-// not optimized for speed
-// optimized for largest rectangle
+/*
+ * * not optimized for speed; optimized for largest rectangle
+ */
 function findAllRectsInQuadrant(aGrid, aAnchorPoint, aOtherVertexPoint, aSweepHorizontal, aSweepVertical, aVerticalMinOrMaxFunction)
 {
    if (isWall(aAnchorPoint.x, aAnchorPoint.y))
@@ -344,8 +371,6 @@ function isNotTakenByRectangle(aRectangles, aX, aY)
 }
 
 
-// not wall and not taken
-//function isFree
 function isNotWallAndNotTakenByRectangle(aGrid, aRectangles, aX, aY)
 {
    return (!isWall(aGrid, aX, aY) && isNotTakenByRectangle(aRectangles, aX, aY));
@@ -416,17 +441,3 @@ function Quadrant(aAnchorPoint, aOtherVertexPoint)
    this.anchorPoint      = aAnchorPoint;
    this.otherVertexPoint = aOtherVertexPoint;
 }
-
-/*
-* grid starts at lower left 0-based index (increase as go up/right)
-* grid represents where walls are
-* 0 = no wall
-* 1 = wall
-
-# complex solution
-* do the cross
-* consider each rectangle, regardless of whether already taken
-* find each rectangle this new one overlaps.
-* find the new way to break this up
-* if the resulting number of rectangles is smaller, choose this new solution
-*/

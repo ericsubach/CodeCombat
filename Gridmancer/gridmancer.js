@@ -61,6 +61,11 @@ for (var tY = 0; tY + kTileSize < kGrid.length; tY += kTileSize)
          try
          {
             tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, aRectangles, tAnchorPoint);
+
+            if (tLargestRectangle)
+            {
+               myAddRectangle(aRectangles, tLargestRectangle);
+            }
          }
          catch (aException)
          {

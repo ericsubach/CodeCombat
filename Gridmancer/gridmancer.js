@@ -424,9 +424,9 @@ function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOth
    var tVerticalMinOrMaxSoFar = aOtherVertexPoint.y + aSweepVertical; // FIXME this plus part?
    var tRectangles = new Array();
    
-   for (var tX = aAnchorPoint.x; tX != aOtherVertexPoint.x; tX += aSweepHorizontal)
+   for (var tX = aAnchorPoint.x; tX != (aOtherVertexPoint.x + aSweepHorizontal); tX += aSweepHorizontal)
    {
-      for (var tY = aAnchorPoint.y; tY != aOtherVertexPoint.y; tY += aSweepVertical)
+      for (var tY = aAnchorPoint.y; tY != (aOtherVertexPoint.y + aSweepVertical); tY += aSweepVertical)
       {
          if (isWall(aGrid, tX, tY) || !isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y))
          {
@@ -559,6 +559,19 @@ function Rectangle(aX1, aY1, aX2, aY2)
    {
       return '[(' + this.x + ', ' + this.y + '), ' + '(' + this.x2 + ', ' + this.y2 + ')]';
    };
+
+   this.ensureValid = function()
+   {
+      if (this.x < 0 || this.y < 0 || this.x2 < 0 || this.y2 < 0)
+      {
+         tMessage = 'Invalid rectangle' + this.toString();
+         // FIXME uncomment
+         //j = 1 + kUndefined;
+         //throw tMessage;
+      }
+   };
+
+   this.ensureValid();
 }
 
 

@@ -472,7 +472,7 @@ function findAllRectsInQuadrant(aGrid, aAnchorPoint, aOtherVertexPoint, aSweepHo
 
 function isWall(aGrid, aX, aY)
 {
-   return (aGrid[tY][tX].length == 1);
+   return (aGrid[aY][aX].length == 1);
 }
 
 

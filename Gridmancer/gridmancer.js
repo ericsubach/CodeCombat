@@ -89,49 +89,55 @@ var kIncrement  = 0;
 writeDebug(kGrid.length);
 writeDebug(kGrid[0].length);
 
-for (var tY = 0; tY + kIncrement < kGrid.length; tY += kTileSize)
+function main()
 {
-   for (var tX = 0; tX + kIncrement < kGrid[0].length; tX += kTileSize)
+   for (var tY = 0; tY + kIncrement < kGrid.length; tY += kTileSize)
    {
-      writeDebug('Checking point = ' + new Point(tX, tY));
-      var tNotOccupied = isNotWallAndNotTakenByRectangle(kGrid, tX, tY);
-      
-      if (tNotOccupied)
+      for (var tX = 0; tX + kIncrement < kGrid[0].length; tX += kTileSize)
       {
-         tAnchorPoint = new Point(tX, tY);
-         writeDebug('Point is not occupied: ' + tAnchorPoint);
-
-         try
+         writeDebug('Checking point = ' + new Point(tX, tY));
+         var tNotOccupied = isNotWallAndNotTakenByRectangle(kGrid, kRectangles, tX, tY);
+         
+         if (tNotOccupied)
          {
-            tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, kRectangles, tAnchorPoint);
+            tAnchorPoint = new Point(tX, tY);
+            writeDebug('Point is not occupied: ' + tAnchorPoint);
 
-            if (tLargestRectangle)
-            {
-               myAddRectangle(kRectangles, tLargestRectangle);
-            }
-         }
-         catch (aException)
-         {
-            // TODO
+            // try
+            // {
+               tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, kRectangles, tAnchorPoint);
+
+               if (tLargestRectangle)
+               {
+                  myAddRectangle(kRectangles, tLargestRectangle);
+               }
+            // }
+            // catch (aException)
+            // {
+            //    // TODO
+            // }
          }
       }
    }
+
+   // At this point the entire grid should be filled with rectangles.
+
+   writeDebug('===================================');
+   writeDebug('There are ' + kRectangles.length + ' rectangles = ' + kRectangles);
 }
-
-// At this point the entire grid should be filled with rectangles.
-
-writeDebug('===================================');
-writeDebug('There are ' + kRectangles.length + ' rectangles = ' + kRectangles);
 
 //==============================================================================
 
 function myAddRectangle(aRectangles, aRectangle)
 {
    writeDebug('Adding rectangle = ' + aRectangle);
-   this.addRect(aRectangle.x + (aRectangle.width / 2),
-                aRectangle.y + (aRectangle.height / 2),
-                aRectangle.width,
-                aRectangle.height);
+   if (!kIsTest)
+   {
+      this.addRect(aRectangle.x + (aRectangle.width / 2),
+                   aRectangle.y + (aRectangle.height / 2),
+                   aRectangle.width,
+                   aRectangle.height);
+   }
    aRectangles.push(aRectangle);
 }
 
@@ -406,7 +412,7 @@ function findNearestWallInDirection(aGrid, aAnchorPoint, aHorizontalIncrement, a
  */
 function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOtherVertexPoint, aSweepHorizontal, aSweepVertical, aVerticalMinOrMaxFunction)
 {
-   if (isWall(aAnchorPoint.x, aAnchorPoint.y) || !isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y))
+   if (isWall(aGrid, aAnchorPoint.x, aAnchorPoint.y) || !isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y))
    {
       throw new Exception("Anchor point must not be a wall.")
    }
@@ -429,7 +435,7 @@ function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOth
       // FIXME constructor args vs. what is passed here. they differ
 
       tRectangle = new Rectangle(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
-      tRectangles.add(tRectangle);
+      tRectangles.push(tRectangle);
    }
    
    return tRectangles;
@@ -592,3 +598,7 @@ function rectangleFromAnchorPointToOtherPoint(aAnchorPointX, aAnchorPointY, aOth
 
    // FIXME maybe some weird circumstances to watch out for
 }
+
+
+
+main()

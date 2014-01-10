@@ -100,12 +100,12 @@ function main()
          
          if (tNotOccupied)
          {
-            tAnchorPoint = new Point(tX, tY);
+            var tAnchorPoint = new Point(tX, tY);
             writeDebug('Point is not occupied: ' + tAnchorPoint);
 
             // try
             // {
-               tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, kRectangles, tAnchorPoint);
+               var tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, kRectangles, tAnchorPoint);
 
                if (tLargestRectangle)
                {
@@ -148,29 +148,29 @@ function myAddRectangle(aRectangles, aRectangle)
  */
 function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnchorPoint)
 {
-   tCardinalCollisionsArray = findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPoint);
-   tNorth = tCardinalCollisionsArray[0];
-   tSouth = tCardinalCollisionsArray[1];
-   tWest  = tCardinalCollisionsArray[2];
-   tEast  = tCardinalCollisionsArray[3];
+   var tCardinalCollisionsArray = findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPoint);
+   var tNorth = tCardinalCollisionsArray[0];
+   var tSouth = tCardinalCollisionsArray[1];
+   var tWest  = tCardinalCollisionsArray[2];
+   var tEast  = tCardinalCollisionsArray[3];
 
-   tQuadrant1 = new Quadrant(aAnchorPoint, new Point(tEast.x, tNorth.y));
-   tQuadrant2 = new Quadrant(aAnchorPoint, new Point(tEast.x, tSouth.y));
-   tQuadrant3 = new Quadrant(aAnchorPoint, new Point(tWest.x, tSouth.y));
-   tQuadrant4 = new Quadrant(aAnchorPoint, new Point(tWest.x, tNorth.y));
+   var tQuadrant1 = new Quadrant(aAnchorPoint, new Point(tEast.x, tNorth.y));
+   var tQuadrant2 = new Quadrant(aAnchorPoint, new Point(tEast.x, tSouth.y));
+   var tQuadrant3 = new Quadrant(aAnchorPoint, new Point(tWest.x, tSouth.y));
+   var tQuadrant4 = new Quadrant(aAnchorPoint, new Point(tWest.x, tNorth.y));
    
-   tQuadrant1Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant1.otherVertexPoint,  1, -1, Math.max);
-   tQuadrant2Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant2.otherVertexPoint,  1,  1, Math.min);
-   tQuadrant3Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant3.otherVertexPoint, -1,  1, Math.min);
-   tQuadrant4Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
+   var tQuadrant1Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant1.otherVertexPoint,  1, -1, Math.max);
+   var tQuadrant2Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant2.otherVertexPoint,  1,  1, Math.min);
+   var tQuadrant3Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant3.otherVertexPoint, -1,  1, Math.min);
+   var tQuadrant4Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
    
-   tRect1And2 = largestCombinedRectangleQuadrant1And2(tQuadrant1Rects, tQuadrant2Rects);
-   tRect2And3 = largestCombinedRectangleQuadrant2And3(tQuadrant2Rects, tQuadrant3Rects);
-   tRect3And4 = largestCombinedRectangleQuadrant3And4(tQuadrant3Rects, tQuadrant4Rects);
-   tRect4And1 = largestCombinedRectangleQuadrant1And4(tQuadrant1Rects, tQuadrant4Rects);
+   var tRect1And2 = largestCombinedRectangleQuadrant1And2(tQuadrant1Rects, tQuadrant2Rects);
+   var tRect2And3 = largestCombinedRectangleQuadrant2And3(tQuadrant2Rects, tQuadrant3Rects);
+   var tRect3And4 = largestCombinedRectangleQuadrant3And4(tQuadrant3Rects, tQuadrant4Rects);
+   var tRect4And1 = largestCombinedRectangleQuadrant1And4(tQuadrant1Rects, tQuadrant4Rects);
    
-   tCombinedRectsArray = new Array(tRect1And2, tRect2And3, tRect3And4, tRect4And1);
-   tMaxAreaRectangle = maxAreaRectangle(tCombinedRectsArray);
+   var tCombinedRectsArray = new Array(tRect1And2, tRect2And3, tRect3And4, tRect4And1);
+   var tMaxAreaRectangle = maxAreaRectangle(tCombinedRectsArray);
    
    return tMaxAreaRectangle;
 }
@@ -181,29 +181,29 @@ function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnch
  */
 function findLargestRectangleFromAnchorPoint(aGrid, aAnchorPoint)
 {
-   tCardinalWallsArray = findNearestWallsInAllDirections(aGrid, aAnchorPoint);
-   tNorth = tCardinalWallsArray[0];
-   tSouth = tCardinalWallsArray[1];
-   tWest  = tCardinalWallsArray[2];
-   tEast  = tCardinalWallsArray[3];
+   var tCardinalWallsArray = findNearestWallsInAllDirections(aGrid, aAnchorPoint);
+   var tNorth = tCardinalWallsArray[0];
+   var tSouth = tCardinalWallsArray[1];
+   var tWest  = tCardinalWallsArray[2];
+   var tEast  = tCardinalWallsArray[3];
 
-   tQuadrant1 = new Quadrant(aAnchorPoint, new Point(tEast.x, tNorth.y));
-   tQuadrant2 = new Quadrant(aAnchorPoint, new Point(tEast.x, tSouth.y));
-   tQuadrant3 = new Quadrant(aAnchorPoint, new Point(tWest.x, tSouth.y));
-   tQuadrant4 = new Quadrant(aAnchorPoint, new Point(tWest.x, tNorth.y));
+   var tQuadrant1 = new Quadrant(aAnchorPoint, new Point(tEast.x, tNorth.y));
+   var tQuadrant2 = new Quadrant(aAnchorPoint, new Point(tEast.x, tSouth.y));
+   var tQuadrant3 = new Quadrant(aAnchorPoint, new Point(tWest.x, tSouth.y));
+   var tQuadrant4 = new Quadrant(aAnchorPoint, new Point(tWest.x, tNorth.y));
    
-   tQuadrant1Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant1.otherVertexPoint,  1, -1, Math.max);
-   tQuadrant2Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant2.otherVertexPoint,  1,  1, Math.min);
-   tQuadrant3Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant3.otherVertexPoint, -1,  1, Math.min);
-   tQuadrant4Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
+   var tQuadrant1Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant1.otherVertexPoint,  1, -1, Math.max);
+   var tQuadrant2Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant2.otherVertexPoint,  1,  1, Math.min);
+   var tQuadrant3Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant3.otherVertexPoint, -1,  1, Math.min);
+   var tQuadrant4Rects = findAllRectsInQuadrant(aGrid, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
    
-   tRect1And2 = largestCombinedRectangleHorizontalEdge(tQuadrant1Rects, tQuadrant2Rects);
-   tRect2And3 = largestCombinedRectangleVerticalEdge(tQuadrant3Rects, tQuadrant2Rects);
-   tRect3And4 = largestCombinedRectangleHorizontalEdge(tQuadrant4Rects, tQuadrant3Rects);
-   tRect4And1 = largestCombinedRectangleVerticalEdge(tQuadrant4Rects, tQuadrant1Rects);
+   var tRect1And2 = largestCombinedRectangleHorizontalEdge(tQuadrant1Rects, tQuadrant2Rects);
+   var tRect2And3 = largestCombinedRectangleVerticalEdge(tQuadrant3Rects, tQuadrant2Rects);
+   var tRect3And4 = largestCombinedRectangleHorizontalEdge(tQuadrant4Rects, tQuadrant3Rects);
+   var tRect4And1 = largestCombinedRectangleVerticalEdge(tQuadrant4Rects, tQuadrant1Rects);
    
-   tCombinedRectsArray = new Array(tRect1And2, tRect2And3, tRect3And4, tRect4And1);
-   tMaxAreaRectangle = maxAreaRectangle(tCombinedRectsArray);
+   var tCombinedRectsArray = new Array(tRect1And2, tRect2And3, tRect3And4, tRect4And1);
+   var tMaxAreaRectangle = maxAreaRectangle(tCombinedRectsArray);
    
    return tMaxAreaRectangle;
 }
@@ -211,10 +211,10 @@ function findLargestRectangleFromAnchorPoint(aGrid, aAnchorPoint)
 
 function maxAreaRectangle(aRectanglesArray)
 {
-   tMaxAreaRectangle = null;
-   tMaxArea = -1;
+   var tMaxAreaRectangle = null;
+   var tMaxArea = -1;
    
-   for (tIdx = 0; tIdx < aRectanglesArray.length; tIdx++)
+   for (var tIdx = 0; tIdx < aRectanglesArray.length; tIdx++)
    {
       if (aRectanglesArray[tIdx].area() > tMaxArea)
       {
@@ -232,22 +232,22 @@ function maxAreaRectangle(aRectanglesArray)
  */
 function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectanglesQuadrant2)
 {
-   tPotentialRectangles = aRectanglesQuadrant1.concat(aRectanglesQuadrant2);
+   var tPotentialRectangles = aRectanglesQuadrant1.concat(aRectanglesQuadrant2);
 
    /*
     * Try all combinations of rectangles from each quadrant whose x values align,
     * then choose the largest one.
     */
-   for (tI = 0; tI < aRectanglesQuadrant1.length; tI++)
+   for (var tI = 0; tI < aRectanglesQuadrant1.length; tI++)
    {
-      tFirst = aRectanglesQuadrant1[tI];
-      for (tJ = 0; tJ < aRectanglesQuadrant2.length; tJ++)
+      var tFirst = aRectanglesQuadrant1[tI];
+      for (var tJ = 0; tJ < aRectanglesQuadrant2.length; tJ++)
       {
-         tSecond = aRectanglesQuadrant2[tJ];
+         var tSecond = aRectanglesQuadrant2[tJ];
          if (tFirst.x2 == tSecond.x2)
          {
             // top-left to bottom-right
-            tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
+            var tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
             tPotentialRectangles.push(tTestRectangle);
          }
       }
@@ -259,22 +259,22 @@ function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectangles
 
 function largestCombinedRectangleQuadrant2And3(aRectanglesQuadrant2, aRectanglesQuadrant3)
 {
-   tPotentialRectangles = aRectanglesQuadrant2.concat(aRectanglesQuadrant3);
+   var tPotentialRectangles = aRectanglesQuadrant2.concat(aRectanglesQuadrant3);
 
    /*
     * Try all combinations of rectangles from each quadrant whose y values align,
     * then choose the largest one.
     */
-   for (tI = 0; tI < aRectanglesQuadrant3.length; tI++)
+   for (var tI = 0; tI < aRectanglesQuadrant3.length; tI++)
    {
-      tFirst = aRectanglesQuadrant3[tI];
-      for (tJ = 0; tJ < aRectanglesQuadrant2.length; tJ++)
+      var tFirst = aRectanglesQuadrant3[tI];
+      for (var tJ = 0; tJ < aRectanglesQuadrant2.length; tJ++)
       {
-         tSecond = aRectanglesQuadrant2[tJ];
+         var tSecond = aRectanglesQuadrant2[tJ];
          if (tFirst.y2 == tSecond.y2)
          {
             // top-left to bottom-right
-            tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
+            var tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
             tPotentialRectangles.push(tTestRectangle);
          }
       }
@@ -286,22 +286,22 @@ function largestCombinedRectangleQuadrant2And3(aRectanglesQuadrant2, aRectangles
 
 function largestCombinedRectangleQuadrant3And4(aRectanglesQuadrant3, aRectanglesQuadrant4)
 {
-   tPotentialRectangles = aRectanglesQuadrant3.concat(aRectanglesQuadrant4);
+   var tPotentialRectangles = aRectanglesQuadrant3.concat(aRectanglesQuadrant4);
 
    /*
     * Try all combinations of rectangles from each quadrant whose x values align,
     * then choose the largest one.
     */
-   for (tI = 0; tI < aRectanglesQuadrant4.length; tI++)
+   for (var tI = 0; tI < aRectanglesQuadrant4.length; tI++)
    {
-      tFirst = aRectanglesQuadrant4[tI];
-      for (tJ = 0; tJ < aRectanglesQuadrant3.length; tJ++)
+      var tFirst = aRectanglesQuadrant4[tI];
+      for (var tJ = 0; tJ < aRectanglesQuadrant3.length; tJ++)
       {
-         tSecond = aRectanglesQuadrant3[tJ];
+         var tSecond = aRectanglesQuadrant3[tJ];
          if (tFirst.x2 == tSecond.x2)
          {
             // top-left to bottom-right
-            tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
+            var tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
             tPotentialRectangles.push(tTestRectangle);
          }
       }
@@ -313,22 +313,22 @@ function largestCombinedRectangleQuadrant3And4(aRectanglesQuadrant3, aRectangles
 
 function largestCombinedRectangleQuadrant1And4(aRectanglesQuadrant1, aRectanglesQuadrant4)
 {
-   tPotentialRectangles = aRectanglesQuadrant1.concat(aRectanglesQuadrant4);
+   var tPotentialRectangles = aRectanglesQuadrant1.concat(aRectanglesQuadrant4);
 
    /*
     * Try all combinations of rectangles from each quadrant whose y values align,
     * then choose the largest one.
     */
-   for (tI = 0; tI < aRectanglesQuadrant4.length; tI++)
+   for (var tI = 0; tI < aRectanglesQuadrant4.length; tI++)
    {
-      tFirst = aRectanglesQuadrant4[tI];
-      for (tJ = 0; tJ < aRectanglesQuadrant1.length; tJ++)
+      var tFirst = aRectanglesQuadrant4[tI];
+      for (var tJ = 0; tJ < aRectanglesQuadrant1.length; tJ++)
       {
-         tSecond = aRectanglesQuadrant1[tJ];
+         var tSecond = aRectanglesQuadrant1[tJ];
          if (tFirst.y2 == tSecond.y2)
          {
             // top-left to bottom-right
-            tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
+            var tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2);
             tPotentialRectangles.push(tTestRectangle);
          }
       }
@@ -349,12 +349,12 @@ function largestCombinedRectangleVerticalEdge(aRectanglesWest, aRectanglesEast)
 
 function findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPoint)
 {
-   tNorth = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint,  0, -1);
-   tSouth = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint,  0,  1);
-   tWest  = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint, -1,  0);
-   tEast  = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint,  1,  0);
+   var tNorth = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint,  0, -1);
+   var tSouth = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint,  0,  1);
+   var tWest  = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint, -1,  0);
+   var tEast  = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint,  1,  0);
    
-   tArray = new Array();
+   var tArray = new Array();
    tArray.push(tNorth);
    tArray.push(tSouth);
    tArray.push(tWest);
@@ -366,12 +366,12 @@ function findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPo
 
 function findNearestWallsInAllDirections(aGrid, aAnchorPoint)
 {
-   tNorth = findNearestWallInDirection(aGrid, aAnchorPoint,  0, -1);
-   tSouth = findNearestWallInDirection(aGrid, aAnchorPoint,  0,  1);
-   tWest  = findNearestWallInDirection(aGrid, aAnchorPoint, -1,  0);
-   tEast  = findNearestWallInDirection(aGrid, aAnchorPoint,  1,  0);
+   var tNorth = findNearestWallInDirection(aGrid, aAnchorPoint,  0, -1);
+   var tSouth = findNearestWallInDirection(aGrid, aAnchorPoint,  0,  1);
+   var tWest  = findNearestWallInDirection(aGrid, aAnchorPoint, -1,  0);
+   var tEast  = findNearestWallInDirection(aGrid, aAnchorPoint,  1,  0);
    
-   tArray = new Array();
+   var tArray = new Array();
    tArray.push(tNorth);
    tArray.push(tSouth);
    tArray.push(tWest);
@@ -383,6 +383,8 @@ function findNearestWallsInAllDirections(aGrid, aAnchorPoint)
 
 function findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint, aHorizontalIncrement, aVerticalIncrement)
 {
+   var tX;
+   var tY;
    for (tX = aAnchorPoint.x, tY = aAnchorPoint.y;
         !isWall(aGrid, tX, tY) && isNotTakenByRectangle(aRectangles, tX, tY);
         tX += aHorizontalIncrement, tY += aVerticalIncrement)
@@ -396,6 +398,8 @@ function findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint, 
 
 function findNearestWallInDirection(aGrid, aAnchorPoint, aHorizontalIncrement, aVerticalIncrement)
 {
+   var tX;
+   var tY;
    for (tX = aAnchorPoint.x, tY = aAnchorPoint.y;
         !isWall(tX, tY);
         tX += aHorizontalIncrement, tY += aVerticalIncrement)
@@ -417,12 +421,12 @@ function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOth
       throw new Exception("Anchor point must not be a wall.")
    }
 
-   tVerticalMinOrMaxSoFar = aOtherVertexPoint.y + aSweepVertical; // FIXME this plus part?
-   tRectangles = new Array();
+   var tVerticalMinOrMaxSoFar = aOtherVertexPoint.y + aSweepVertical; // FIXME this plus part?
+   var tRectangles = new Array();
    
-   for (tX = aAnchorPoint.x; tX != aOtherVertexPoint.x; tX += aSweepHorizontal)
+   for (var tX = aAnchorPoint.x; tX != aOtherVertexPoint.x; tX += aSweepHorizontal)
    {
-      for (tY = aAnchorPoint.y; tY != aOtherVertexPoint.y; tY += aSweepVertical)
+      for (var tY = aAnchorPoint.y; tY != aOtherVertexPoint.y; tY += aSweepVertical)
       {
          if (isWall(aGrid, tX, tY) || !isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y))
          {
@@ -434,7 +438,7 @@ function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOth
       // FIXME obo ?
       // FIXME constructor args vs. what is passed here. they differ
 
-      tRectangle = new Rectangle(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
+      var tRectangle = new Rectangle(aAnchorPoint.x, aAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
       tRectangles.push(tRectangle);
    }
    
@@ -452,12 +456,12 @@ function findAllRectsInQuadrant(aGrid, aAnchorPoint, aOtherVertexPoint, aSweepHo
       throw new Exception("Anchor point must not be a wall.")
    }
 
-   tVerticalMinOrMaxSoFar = aOtherVertexPoint.y + aSweepVertical; // FIXME this plus part?
-   tRectangles = new Array();
+   var tVerticalMinOrMaxSoFar = aOtherVertexPoint.y + aSweepVertical; // FIXME this plus part?
+   var tRectangles = new Array();
    
-   for (tX = aAnchorPoint.x; tX != aOtherVertexPoint.x; tX += aSweepHorizontal)
+   for (var tX = aAnchorPoint.x; tX != aOtherVertexPoint.x; tX += aSweepHorizontal)
    {
-      for (tY = aAnchorPoint.y; tY != aOtherVertexPoint.y; tY += aSweepVertical)
+      for (var tY = aAnchorPoint.y; tY != aOtherVertexPoint.y; tY += aSweepVertical)
       {
          if (isWall(aGrid, tX, tY))
          {
@@ -468,7 +472,7 @@ function findAllRectsInQuadrant(aGrid, aAnchorPoint, aOtherVertexPoint, aSweepHo
       
       // FIXME obo ?
       //tRectangle = new Rectangle(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
-      tRectangle = rectangleFromAnchorPointToOtherPoint(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
+      var tRectangle = rectangleFromAnchorPointToOtherPoint(aAnchorPoint.x, tAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
       tRectangles.add(tRectangle);
    }
    
@@ -484,8 +488,7 @@ function isWall(aGrid, aX, aY)
 
 function isNotTakenByRectangle(aRectangles, aX, aY)
 {
-   //throw new Exception("Unimplemented");
-   for (tIdx = 0; tIdx < aRectangles.length; tIdx++)
+   for (var tIdx = 0; tIdx < aRectangles.length; tIdx++)
    {
       if (aRectangles[tIdx].contains(aX, aY))
       {
@@ -599,6 +602,6 @@ function rectangleFromAnchorPointToOtherPoint(aAnchorPointX, aAnchorPointY, aOth
    // FIXME maybe some weird circumstances to watch out for
 }
 
-
+//==============================================================================
 
 main()

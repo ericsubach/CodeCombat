@@ -21,6 +21,15 @@
 * should work for the example level but may fail if the level is not aligned to a 4x4 grid style.
 * assumption: bounded by a wall on all sides, otherwise out-of-bounds errors will occur
 * all of my functions are based with the grid (0, 0) based in the upper-left and increasing right/down.
+
+* there is a problem with the was I represented the problem. It has to do with
+  representation of coordinates. I really want to represent each coordinate as
+  the center of a square. That is opposed to the other representation where a
+  coordinate has no width, height. Thus, in both systems the equivalent unit
+  square is:
+  - [(1, 1), (1, 1)] equal to (1, 1)
+  - [(1, 1), (2, 2)]
+
 */
 
 //==============================================================================
@@ -560,7 +569,7 @@ function Rectangle(aX1, aY1, aX2, aY2)
    
    this.area = function()
    {
-      return (this.width * this.height);
+      return ((this.x2 - this.x) + 1) * ((this.y2 - this.y) + 1);
    };
    
    this.contains = function(aX, aY)

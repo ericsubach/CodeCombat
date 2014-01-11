@@ -560,8 +560,8 @@ function Rectangle(aX1, aY1, aX2, aY2)
    
    this.contains = function(aX, aY)
    {
-      return (this.x < aX && aX < (this.x + this.width) &&
-              this.y < aY && aY < (this.y + this.height));
+      return (this.x <= aX && aX <= this.x2 &&
+              this.y <= aY && aY <= this.y2);
    };
 
    this.containsPoint = function(aPoint)

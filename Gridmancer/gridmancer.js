@@ -181,9 +181,13 @@ function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnch
    var tQuadrant4Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
    
    var tRect1And2 = largestCombinedRectangleQuadrant1And2(tQuadrant1Rects, tQuadrant2Rects);
+   writeDebug('largest combined 1+2 = ' + tRect1And2);
    var tRect2And3 = largestCombinedRectangleQuadrant2And3(tQuadrant2Rects, tQuadrant3Rects);
+   writeDebug('largest combined 2+3 = ' + tRect2And3);
    var tRect3And4 = largestCombinedRectangleQuadrant3And4(tQuadrant3Rects, tQuadrant4Rects);
+   writeDebug('largest combined 3+4 = ' + tRect3And4);
    var tRect4And1 = largestCombinedRectangleQuadrant1And4(tQuadrant1Rects, tQuadrant4Rects);
+   writeDebug('largest combined 4+1 = ' + tRect4And1);
    
    var tCombinedRectsArray = new Array(tRect1And2, tRect2And3, tRect3And4, tRect4And1);
    tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant1Rects);

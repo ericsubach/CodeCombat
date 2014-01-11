@@ -434,9 +434,17 @@ function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOth
    return tRectangles;
 }
 
-
+/*
+ * Returns true if is a wall or not a valid position on the grid (out-of-bounds).
+ */
 function isWall(aGrid, aX, aY)
 {
+   if (0 > aX || aX >= aGrid[0].length ||
+       0 > aY || aY >= aGrid.length)
+   {
+      return true;
+   }
+
    return (aGrid[aY][aX].length == 1);
 }
 

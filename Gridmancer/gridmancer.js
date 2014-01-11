@@ -21,6 +21,15 @@
 * should work for the example level but may fail if the level is not aligned to a 4x4 grid style.
 * assumption: bounded by a wall on all sides, otherwise out-of-bounds errors will occur
 * all of my functions are based with the grid (0, 0) based in the upper-left and increasing right/down.
+
+* there is a problem with the was I represented the problem. It has to do with
+  representation of coordinates. I really want to represent each coordinate as
+  the center of a square. That is opposed to the other representation where a
+  coordinate has no width, height. Thus, in both systems the equivalent unit
+  square is:
+  - [(1, 1), (1, 1)] equal to (1, 1)
+  - [(1, 1), (2, 2)]
+
 */
 
 //==============================================================================
@@ -110,6 +119,7 @@ function main()
 
                if (tLargestRectangle)
                {
+                  writeDebug('The largest rectangle was = ' + tLargestRectangle);
                   myAddRectangle(kRectangles, tLargestRectangle);
                }
             // }
@@ -171,11 +181,19 @@ function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnch
    var tQuadrant4Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
    
    var tRect1And2 = largestCombinedRectangleQuadrant1And2(tQuadrant1Rects, tQuadrant2Rects);
+   writeDebug('largest combined 1+2 = ' + tRect1And2);
    var tRect2And3 = largestCombinedRectangleQuadrant2And3(tQuadrant2Rects, tQuadrant3Rects);
+   writeDebug('largest combined 2+3 = ' + tRect2And3);
    var tRect3And4 = largestCombinedRectangleQuadrant3And4(tQuadrant3Rects, tQuadrant4Rects);
+   writeDebug('largest combined 3+4 = ' + tRect3And4);
    var tRect4And1 = largestCombinedRectangleQuadrant1And4(tQuadrant1Rects, tQuadrant4Rects);
+   writeDebug('largest combined 4+1 = ' + tRect4And1);
    
    var tCombinedRectsArray = new Array(tRect1And2, tRect2And3, tRect3And4, tRect4And1);
+   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant1Rects);
+   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant2Rects);
+   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant3Rects);
+   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant4Rects);
    var tMaxAreaRectangle = maxAreaRectangle(tCombinedRectsArray);
    
    return tMaxAreaRectangle;
@@ -238,7 +256,7 @@ function maxAreaRectangle(aRectanglesArray)
  */
 function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectanglesQuadrant2)
 {
-   var tPotentialRectangles = aRectanglesQuadrant1.concat(aRectanglesQuadrant2);
+   var tPotentialRectangles = new Array();
 
    /*
     * Try all combinations of rectangles from each quadrant whose x values align,
@@ -265,7 +283,7 @@ function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectangles
 
 function largestCombinedRectangleQuadrant2And3(aRectanglesQuadrant2, aRectanglesQuadrant3)
 {
-   var tPotentialRectangles = aRectanglesQuadrant2.concat(aRectanglesQuadrant3);
+   var tPotentialRectangles = new Array();
 
    /*
     * Try all combinations of rectangles from each quadrant whose y values align,
@@ -292,7 +310,7 @@ function largestCombinedRectangleQuadrant2And3(aRectanglesQuadrant2, aRectangles
 
 function largestCombinedRectangleQuadrant3And4(aRectanglesQuadrant3, aRectanglesQuadrant4)
 {
-   var tPotentialRectangles = aRectanglesQuadrant3.concat(aRectanglesQuadrant4);
+   var tPotentialRectangles = new Array();
 
    /*
     * Try all combinations of rectangles from each quadrant whose x values align,
@@ -319,7 +337,7 @@ function largestCombinedRectangleQuadrant3And4(aRectanglesQuadrant3, aRectangles
 
 function largestCombinedRectangleQuadrant1And4(aRectanglesQuadrant1, aRectanglesQuadrant4)
 {
-   var tPotentialRectangles = aRectanglesQuadrant1.concat(aRectanglesQuadrant4);
+   var tPotentialRectangles = new Array();
 
    /*
     * Try all combinations of rectangles from each quadrant whose y values align,
@@ -555,7 +573,7 @@ function Rectangle(aX1, aY1, aX2, aY2)
    
    this.area = function()
    {
-      return (this.width * this.height);
+      return ((this.x2 - this.x) + 1) * ((this.y2 - this.y) + 1);
    };
    
    this.contains = function(aX, aY)

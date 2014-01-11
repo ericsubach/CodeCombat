@@ -95,6 +95,7 @@ function main()
    {
       for (var tX = 0; tX + kIncrement < kGrid[0].length; tX += kTileSize)
       {
+         writeDebug('');
          writeDebug('Checking point = ' + new Point(tX, tY));
          var tNotOccupied = isNotWallAndNotTakenByRectangle(kGrid, kRectangles, tX, tY);
          
@@ -159,9 +160,13 @@ function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnch
    var tQuadrant3 = new Quadrant(aAnchorPoint, new Point(tWest.x, tSouth.y));
    var tQuadrant4 = new Quadrant(aAnchorPoint, new Point(tWest.x, tNorth.y));
    
+   writeDebug('searching quadrant 1');
    var tQuadrant1Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant1.otherVertexPoint,  1, -1, Math.max);
+   writeDebug('searching quadrant 2');
    var tQuadrant2Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant2.otherVertexPoint,  1,  1, Math.min);
+   writeDebug('searching quadrant 3');
    var tQuadrant3Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant3.otherVertexPoint, -1,  1, Math.min);
+   writeDebug('searching quadrant 4');
    var tQuadrant4Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, Math.max);
    
    var tRect1And2 = largestCombinedRectangleQuadrant1And2(tQuadrant1Rects, tQuadrant2Rects);
@@ -421,24 +426,32 @@ function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOth
       throw new Exception("Anchor point must not be a wall.")
    }
 
-   var tVerticalMinOrMaxSoFar = aOtherVertexPoint.y + aSweepVertical; // FIXME this plus part?
+   writeDebug('Finding all rectangles in quadrant between two points. [anchor = ' + aAnchorPoint + '], [other = ' + aOtherVertexPoint + ']');
+
+   var tVerticalMinOrMaxSoFar = aOtherVertexPoint.y;// + aSweepVertical; // FIXME this plus part?
    var tRectangles = new Array();
+   writeDebug('vertical min/max started out as = ' + tVerticalMinOrMaxSoFar);
    
-   for (var tX = aAnchorPoint.x; tX != (aOtherVertexPoint.x + aSweepHorizontal); tX += aSweepHorizontal)
+   for (var tX = aAnchorPoint.x; tX != (aOtherVertexPoint.x /*+ aSweepHorizontal*/); tX += aSweepHorizontal)
    {
-      for (var tY = aAnchorPoint.y; tY != (aOtherVertexPoint.y + aSweepVertical); tY += aSweepVertical)
+      for (var tY = aAnchorPoint.y; tY != (aOtherVertexPoint.y /*+ aSweepVertical*/); tY += aSweepVertical)
       {
          if (isWall(aGrid, tX, tY) || !isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y))
          {
-            tVerticalMinOrMaxSoFar = aVerticalMinOrMaxFunction(tVerticalMinOrMaxSoFar, tY);
+            //writeDebug('original min/max = ' + tVerticalMinOrMaxSoFar);
+            //writeDebug('tY original = ' + tY);
+            tVerticalMinOrMaxSoFar = aVerticalMinOrMaxFunction(tVerticalMinOrMaxSoFar, tY - aSweepVertical); // looking back on the previous square. could be problamatic
             break;
          }
+         else
+         {
+            //tVerticalMinOrMaxSoFar = aVerticalMinOrMaxFunction(tVerticalMinOrMaxSoFar, tY);
+         }
       }
-      
-      // FIXME obo ?
-      // FIXME constructor args vs. what is passed here. they differ
 
-      var tRectangle = new Rectangle(aAnchorPoint.x, aAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - 1);
+      writeDebug('the vertical min/max is now = ' + tVerticalMinOrMaxSoFar);
+      var tRectangle = new Rectangle(aAnchorPoint.x, aAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - aSweepVertical);// + aSweepVertical);
+      writeDebug('adding rectangle to quadrant = ' + tRectangle);
       tRectangles.push(tRectangle);
    }
    

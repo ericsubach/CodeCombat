@@ -154,6 +154,7 @@ function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnch
    var tSouth = tCardinalCollisionsArray[1];
    var tWest  = tCardinalCollisionsArray[2];
    var tEast  = tCardinalCollisionsArray[3];
+   writeDebug('Collision array: ' + '[north = ' + tNorth.y + '], ' + '[south = ' + tSouth.y + '], ' + '[west = ' + tWest.x + '], ' + '[east = ' + tEast.x + ']');
 
    var tQuadrant1 = new Quadrant(aAnchorPoint, new Point(tEast.x, tNorth.y));
    var tQuadrant2 = new Quadrant(aAnchorPoint, new Point(tEast.x, tSouth.y));
@@ -450,7 +451,7 @@ function findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOth
       }
 
       writeDebug('the vertical min/max is now = ' + tVerticalMinOrMaxSoFar);
-      var tRectangle = new Rectangle(aAnchorPoint.x, aAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - aSweepVertical);// + aSweepVertical);
+      var tRectangle = rectangleFromAnchorPointToOtherPoint(aAnchorPoint.x, aAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - aSweepVertical);// + aSweepVertical);
       writeDebug('adding rectangle to quadrant = ' + tRectangle);
       tRectangles.push(tRectangle);
    }

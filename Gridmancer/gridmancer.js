@@ -110,6 +110,7 @@ function main()
 
                if (tLargestRectangle)
                {
+                  writeDebug('The largest rectangle was = ' + tLargestRectangle);
                   myAddRectangle(kRectangles, tLargestRectangle);
                }
             // }
@@ -176,6 +177,10 @@ function findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnch
    var tRect4And1 = largestCombinedRectangleQuadrant1And4(tQuadrant1Rects, tQuadrant4Rects);
    
    var tCombinedRectsArray = new Array(tRect1And2, tRect2And3, tRect3And4, tRect4And1);
+   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant1Rects);
+   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant2Rects);
+   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant3Rects);
+   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant4Rects);
    var tMaxAreaRectangle = maxAreaRectangle(tCombinedRectsArray);
    
    return tMaxAreaRectangle;
@@ -238,7 +243,7 @@ function maxAreaRectangle(aRectanglesArray)
  */
 function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectanglesQuadrant2)
 {
-   var tPotentialRectangles = aRectanglesQuadrant1.concat(aRectanglesQuadrant2);
+   var tPotentialRectangles = new Array();
 
    /*
     * Try all combinations of rectangles from each quadrant whose x values align,
@@ -265,7 +270,7 @@ function largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectangles
 
 function largestCombinedRectangleQuadrant2And3(aRectanglesQuadrant2, aRectanglesQuadrant3)
 {
-   var tPotentialRectangles = aRectanglesQuadrant2.concat(aRectanglesQuadrant3);
+   var tPotentialRectangles = new Array();
 
    /*
     * Try all combinations of rectangles from each quadrant whose y values align,
@@ -292,7 +297,7 @@ function largestCombinedRectangleQuadrant2And3(aRectanglesQuadrant2, aRectangles
 
 function largestCombinedRectangleQuadrant3And4(aRectanglesQuadrant3, aRectanglesQuadrant4)
 {
-   var tPotentialRectangles = aRectanglesQuadrant3.concat(aRectanglesQuadrant4);
+   var tPotentialRectangles = new Array();
 
    /*
     * Try all combinations of rectangles from each quadrant whose x values align,
@@ -319,7 +324,7 @@ function largestCombinedRectangleQuadrant3And4(aRectanglesQuadrant3, aRectangles
 
 function largestCombinedRectangleQuadrant1And4(aRectanglesQuadrant1, aRectanglesQuadrant4)
 {
-   var tPotentialRectangles = aRectanglesQuadrant1.concat(aRectanglesQuadrant4);
+   var tPotentialRectangles = new Array();
 
    /*
     * Try all combinations of rectangles from each quadrant whose y values align,

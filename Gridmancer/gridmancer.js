@@ -58,6 +58,32 @@
 // Test data
 var kIsTest = true;
 
+/*
+ * Flip the grid vertically.
+ */
+function transformedGrid(aGrid)
+{
+   var tNewGrid = new Array();
+   // var tHalfway = Math.floor(aGrid.length / 2);
+
+   // for (var tIdx = 0; tIdx < tHalfway; tIdx++)
+   // {
+   //    var tOtherSideIdx = (aGrid.length - 1 - tIdx);
+
+   //    // Swap.
+   //    var tTempData = aGrid[tIdx];
+   //    aGrid[tIdx] = aGrid[tOtherSideIdx];
+   //    aGrid[tOtherSideIdx] = tTempData;
+   // }
+
+   for (var tIdx = aGrid.length - 1; tIdx >= 0; tIdx--)
+   {
+      tNewGrid.push(aGrid[tIdx]);
+   }
+
+   return tNewGrid;
+}
+
 function getGrid()
 {
    if (kIsTest)
@@ -103,7 +129,8 @@ function getGrid()
    }
    else
    {
-      return this.getNavGrid().grid;
+      // Flip the grid because my code uses a different coordinate system.
+      return transformedGrid(this.getNavGrid().grid);
    }
 }
 

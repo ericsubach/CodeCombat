@@ -96,7 +96,7 @@ def getGrid():
             [[1],  [],  [],  [], [1]],
          ]
 
-      return tTest4
+      return tTest3
    else:
       # Flip the grid because my code uses a different coordinate system.
       #return this.transformedGrid(this.getNavGrid().grid);
@@ -121,31 +121,35 @@ writeDebug(len(kGrid))
 writeDebug(len(kGrid[0]))
 
 def main():
-   for (tY = 0; tY + kIncrement < len(kGrid); tY += kTileSize):
-      for (tX = 0; tX + kIncrement < len(kGrid[0]); tX += kTileSize):
+   tY = 0
+   while (tY + kIncrement < len(kGrid)):
+      tX = 0
+      while (tX + kIncrement < len(kGrid[0])):
          writeDebug('')
-         writeDebug('Checking point = ' + Point(tX, tY))
+         writeDebug('Checking point = ' + str(Point(tX, tY)))
          tNotOccupied = isNotWallAndNotTakenByRectangle(kGrid, kRectangles, tX, tY)
          
          if tNotOccupied:
             tAnchorPoint = Point(tX, tY)
-            writeDebug('Point is not occupied: ' + tAnchorPoint)
+            writeDebug('Point is not occupied: ' + str(tAnchorPoint))
 
             tLargestRectangle = findLargestRectangleFromAnchorPointAvoidTaken(kGrid, kRectangles, tAnchorPoint)
 
             if tLargestRectangle:
-               writeDebug('The largest rectangle was = ' + tLargestRectangle)
+               writeDebug('The largest rectangle was = ' + str(tLargestRectangle))
                myAddRectangle(kRectangles, tLargestRectangle)
+         tX += kTileSize
+      tY += kTileSize
 
    # At this point the entire grid should be filled with rectangles.
 
    writeDebug('===================================')
-   writeDebug('There are ' + len(kRectangles) + ' rectangles = ' + kRectangles)
+   writeDebug('There are ' + str(len(kRectangles)) + ' rectangles = ' + str(kRectangles))
 
 #==============================================================================
 
 def myAddRectangle(aRectangles, aRectangle):
-   writeDebug('Adding rectangle = ' + aRectangle)
+   writeDebug('Adding rectangle = ' + str(aRectangle))
    if not kIsTest:
       addRect(aRectangle.x + (aRectangle.width / 2),
               aRectangle.y + (aRectangle.height / 2),
@@ -159,13 +163,12 @@ def myAddRectangle(aRectangles, aRectangle):
 # * throws exception if anchor point is taken
 #
 def findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnchorPoint):
-{
    tCardinalCollisionsArray = findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPoint)
    tNorth = tCardinalCollisionsArray[0]
    tSouth = tCardinalCollisionsArray[1]
    tWest  = tCardinalCollisionsArray[2]
    tEast  = tCardinalCollisionsArray[3]
-   writeDebug('Collision array: ' + '[north = ' + tNorth.y + '], ' + '[south = ' + tSouth.y + '], ' + '[west = ' + tWest.x + '], ' + '[east = ' + tEast.x + ']')
+   writeDebug('Collision array: ' + '[north = ' + str(tNorth.y) + '], ' + '[south = ' + str(tSouth.y) + '], ' + '[west = ' + str(tWest.x) + '], ' + '[east = ' + str(tEast.x) + ']')
 
    tQuadrant1 = Quadrant(aAnchorPoint, Point(tEast.x, tNorth.y))
    tQuadrant2 = Quadrant(aAnchorPoint, Point(tEast.x, tSouth.y))
@@ -182,30 +185,29 @@ def findLargestRectangleFromAnchorPointAvoidTaken(aGrid, aRectangles, aAnchorPoi
    tQuadrant4Rects = findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, tQuadrant4.otherVertexPoint, -1, -1, max, 'max')
    
    tRect1And2 = largestCombinedRectangleQuadrant1And2(tQuadrant1Rects, tQuadrant2Rects)
-   writeDebug('largest combined 1+2 = ' + tRect1And2)
+   writeDebug('largest combined 1+2 = ' + str(tRect1And2))
    tRect2And3 = largestCombinedRectangleQuadrant2And3(tQuadrant2Rects, tQuadrant3Rects)
-   writeDebug('largest combined 2+3 = ' + tRect2And3)
+   writeDebug('largest combined 2+3 = ' + str(tRect2And3))
    tRect3And4 = largestCombinedRectangleQuadrant3And4(tQuadrant3Rects, tQuadrant4Rects)
-   writeDebug('largest combined 3+4 = ' + tRect3And4)
+   writeDebug('largest combined 3+4 = ' + str(tRect3And4))
    tRect4And1 = largestCombinedRectangleQuadrant1And4(tQuadrant1Rects, tQuadrant4Rects)
-   writeDebug('largest combined 4+1 = ' + tRect4And1)
+   writeDebug('largest combined 4+1 = ' + str(tRect4And1))
    
    tCombinedRectsArray = [tRect1And2, tRect2And3, tRect3And4, tRect4And1]
-   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant1Rects)
-   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant2Rects)
-   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant3Rects)
-   tCombinedRectsArray = tCombinedRectsArray.concat(tQuadrant4Rects)
+   tCombinedRectsArray.extend(tQuadrant1Rects)
+   tCombinedRectsArray.extend(tQuadrant2Rects)
+   tCombinedRectsArray.extend(tQuadrant3Rects)
+   tCombinedRectsArray.extend(tQuadrant4Rects)
    tMaxAreaRectangle = maxAreaRectangle(tCombinedRectsArray)
    
    return tMaxAreaRectangle
-}
 
 
 def maxAreaRectangle(aRectanglesArray):
    tMaxAreaRectangle = None;
    tMaxArea = -1;
    
-   for (tIdx = 0; tIdx < len(aRectanglesArray); tIdx++):
+   for tIdx in xrange(0, len(aRectanglesArray)):
       if (aRectanglesArray[tIdx].area() > tMaxArea):
          tMaxAreaRectangle = aRectanglesArray[tIdx]
          tMaxArea = tMaxAreaRectangle.area()
@@ -221,9 +223,9 @@ def largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectanglesQuadr
 
    # Try all combinations of rectangles from each quadrant whose x values align,
    # then choose the largest one.
-   for (tI = 0; tI < len(aRectanglesQuadrant1); tI++):
+   for tI in xrange(0, len(aRectanglesQuadrant1)):
       tFirst = aRectanglesQuadrant1[tI]
-      for (tJ = 0; tJ < len(aRectanglesQuadrant2); tJ++):
+      for tJ in xrange(0, len(aRectanglesQuadrant2)):
          tSecond = aRectanglesQuadrant2[tJ]
          if tFirst.x2 == tSecond.x2:
             # top-left to bottom-right
@@ -234,18 +236,18 @@ def largestCombinedRectangleQuadrant1And2(aRectanglesQuadrant1, aRectanglesQuadr
 
 
 def largestCombinedRectangleQuadrant2And3(aRectanglesQuadrant2, aRectanglesQuadrant3):
-   tPotentialRectangles = new Array();
+   tPotentialRectangles = []
 
    # Try all combinations of rectangles from each quadrant whose y values align,
    # then choose the largest one.
-   for (tI = 0; tI < len(aRectanglesQuadrant3); tI++):
+   for tI in xrange(0, len(aRectanglesQuadrant3)):
       tFirst = aRectanglesQuadrant3[tI]
-      for (var tJ = 0; tJ < aRectanglesQuadrant2.length; tJ++):
+      for tJ in xrange(0, len(aRectanglesQuadrant2)):
          tSecond = aRectanglesQuadrant2[tJ]
          if tFirst.y2 == tSecond.y2:
             # top-left to bottom-right
-            var tTestRectangle = new Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2)
-            tPotentialRectangles.push(tTestRectangle)
+            tTestRectangle = Rectangle(tFirst.x, tFirst.y, tSecond.x2, tSecond.y2)
+            tPotentialRectangles.append(tTestRectangle)
    
    return maxAreaRectangle(tPotentialRectangles)
 
@@ -255,9 +257,9 @@ def largestCombinedRectangleQuadrant3And4(aRectanglesQuadrant3, aRectanglesQuadr
 
    # Try all combinations of rectangles from each quadrant whose x values align,
    # then choose the largest one.
-   for (tI = 0; tI < aRectanglesQuadrant4.length; tI++):
+   for tI in xrange(0, len(aRectanglesQuadrant4)):
       tFirst = aRectanglesQuadrant4[tI]
-      for (tJ = 0; tJ < aRectanglesQuadrant3.length; tJ++):
+      for tJ in xrange(0, len(aRectanglesQuadrant3)):
          tSecond = aRectanglesQuadrant3[tJ]
          if tFirst.x2 == tSecond.x2:
             # top-left to bottom-right
@@ -272,9 +274,9 @@ def largestCombinedRectangleQuadrant1And4(aRectanglesQuadrant1, aRectanglesQuadr
 
    # Try all combinations of rectangles from each quadrant whose y values align,
    # then choose the largest one.
-   for (tI = 0; tI < aRectanglesQuadrant4.length; tI++):
+   for tI in xrange(0, len(aRectanglesQuadrant4)):
       tFirst = aRectanglesQuadrant4[tI]
-      for (tJ = 0; tJ < aRectanglesQuadrant1.length; tJ++):
+      for tJ in xrange(0, len(aRectanglesQuadrant1)):
          tSecond = aRectanglesQuadrant1[tJ]
          if tFirst.y2 == tSecond.y2:
             # top-left to bottom-right
@@ -291,22 +293,21 @@ def findNearestCollisionPointsInAllDirections(aGrid, aRectangles, aAnchorPoint):
    tEast  = findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint,  1,  0)
    
    tArray = []
-   tArray.push(tNorth)
-   tArray.push(tSouth)
-   tArray.push(tWest)
-   tArray.push(tEast)
+   tArray.append(tNorth)
+   tArray.append(tSouth)
+   tArray.append(tWest)
+   tArray.append(tEast)
    
    return tArray
 
 
 def findNearestCollisionPointInDirection(aGrid, aRectangles, aAnchorPoint, aHorizontalIncrement, aVerticalIncrement):
-   tX = None
-   tY = None
-   for (tX = aAnchorPoint.x, tY = aAnchorPoint.y;
-        !this.isWall(aGrid, tX, tY) && this.isNotTakenByRectangle(aRectangles, tX, tY);
-        tX += aHorizontalIncrement, tY += aVerticalIncrement)
+   tX = aAnchorPoint.x
+   tY = aAnchorPoint.y
+   while (not isWall(aGrid, tX, tY) and isNotTakenByRectangle(aRectangles, tX, tY)):
+      tX += aHorizontalIncrement
+      tY += aVerticalIncrement
       # Do nothing.
-      pass
    
    return Point(tX, tY)
 
@@ -316,28 +317,32 @@ def findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOtherVer
    Not optimized for speed; optimized for largest rectangle
    '''
 
-   if (this.isWall(aGrid, aAnchorPoint.x, aAnchorPoint.y) || !this.isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y)):
+   if (isWall(aGrid, aAnchorPoint.x, aAnchorPoint.y) or not isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y)):
       raise Exception("Anchor point must not be a wall.")
 
-   writeDebug('Finding all rectangles in quadrant between two points. [anchor = ' + aAnchorPoint + '], [other = ' + aOtherVertexPoint + ']')
+   writeDebug('Finding all rectangles in quadrant between two points. [anchor = ' + str(aAnchorPoint) + '], [other = ' + str(aOtherVertexPoint) + ']')
 
    tVerticalMinOrMaxSoFar = aOtherVertexPoint.y
    tRectangles = []
-   writeDebug('vertical min/max started out as = ' + tVerticalMinOrMaxSoFar)
+   writeDebug('vertical min/max started out as = ' + str(tVerticalMinOrMaxSoFar))
    
-   for (var tX = aAnchorPoint.x; tX != (aOtherVertexPoint.x /*+ aSweepHorizontal*/); tX += aSweepHorizontal):
-      for (var tY = aAnchorPoint.y; tY != (aOtherVertexPoint.y /*+ aSweepVertical*/); tY += aSweepVertical):
-         if (this.isWall(aGrid, tX, tY) || !this.isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y)):
+   tX = aAnchorPoint.x
+   while tX != aOtherVertexPoint.x:
+      tY = aAnchorPoint.y
+      while tY != aOtherVertexPoint.y:
+         if (isWall(aGrid, tX, tY) or not isNotTakenByRectangle(aRectangles, aAnchorPoint.x, aAnchorPoint.y)):
             #writeDebug('original min/max = ' + tVerticalMinOrMaxSoFar);
             #writeDebug('tY original = ' + tY);
             tVerticalMinOrMaxSoFar = aVerticalMinOrMaxFunction(tVerticalMinOrMaxSoFar, tY - aSweepVertical) # looking back on the previous square. could be problamatic
             break
+         tY += aSweepVertical
 
-      writeDebug('the vertical min/max is now = ' + tVerticalMinOrMaxSoFar)
+      writeDebug('the vertical min/max is now = ' + str(tVerticalMinOrMaxSoFar))
       tRectangle = rectangleFromAnchorPointToOtherPoint(aAnchorPoint.x, aAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - aSweepVertical)
-      writeDebug('adding rectangle to quadrant = ' + tRectangle)
+      writeDebug('adding rectangle to quadrant = ' + str(tRectangle))
       tRectangles.append(tRectangle)
    
+      tX += aSweepHorizontal
    return tRectangles
 
 
@@ -345,15 +350,15 @@ def isWall(aGrid, aX, aY):
    '''
    Returns true if is a wall or not a valid position on the grid (out-of-bounds).
    '''
-   if (0 > aX || aX >= aGrid[0].length ||
-       0 > aY || aY >= aGrid.length):
+   if (0 > aX or aX >= len(aGrid[0]) or
+       0 > aY or aY >= len(aGrid)):
       return True
 
    return (len(aGrid[aY][aX]) == 1)
 
 
 def isNotTakenByRectangle(aRectangles, aX, aY):
-   for (tIdx = 0; tIdx < aRectangles.length; tIdx++):
+   for tIdx in xrange(0, len(aRectangles)):
       if (aRectangles[tIdx].contains(aX, aY)):
          return False
       
@@ -361,7 +366,7 @@ def isNotTakenByRectangle(aRectangles, aX, aY):
 
 
 def isNotWallAndNotTakenByRectangle(aGrid, aRectangles, aX, aY):
-   return (!this.isWall(aGrid, aX, aY) && this.isNotTakenByRectangle(aRectangles, aX, aY))
+   return (not isWall(aGrid, aX, aY) and isNotTakenByRectangle(aRectangles, aX, aY))
 
 #==============================================================================
 
@@ -371,11 +376,17 @@ class Point(object):
       self.y = aY;
    
    def toString(self):
-      return '(' + self.x + ', ' + self.y + ')'
+      return '(' + str(self.x) + ', ' + str(self.y) + ')'
+
+   def __str__(self):
+      return self.toString()
+
+   def __repr__(self):
+      return self.toString()
 
 
 class Rectangle(object):
-   def __init__(self, aX, aY, aX2, aY2):
+   def __init__(self, aX1, aY1, aX2, aY2):
       self.x = aX1
       self.y = aY1
       
@@ -392,17 +403,23 @@ class Rectangle(object):
       return ((self.x2 - self.x) + 1) * ((self.y2 - self.y) + 1)
    
    def contains(self, aX, aY):
-      return (self.x <= aX && aX <= self.x2 &&
-              self.y <= aY && aY <= self.y2)
+      return (self.x <= aX and aX <= self.x2 and
+              self.y <= aY and aY <= self.y2)
 
    def containsPoint(aPoint):
       return self.contains(aPoint.x, aPoint.y)
    
    def toString(self):
-      return '[(' + self.x + ', ' + self.y + '), ' + '(' + self.x2 + ', ' + self.y2 + ')]'
+      return '[(' + str(self.x) + ', ' + str(self.y) + '), ' + '(' + str(self.x2) + ', ' + str(self.y2) + ')]'
+
+   def __str__(self):
+      return self.toString()
+
+   def __repr__(self):
+      return self.toString()
 
    def ensureValid(self):
-      if (self.x < 0 || self.y < 0 || self.x2 < 0 || self.y2 < 0):
+      if (self.x < 0 or self.y < 0 or self.x2 < 0 or self.y2 < 0):
          tMessage = 'Invalid rectangle' + self.toString()
          # FIXME uncomment
          #j = 1 + kUndefined;
@@ -420,15 +437,15 @@ def rectangleFromAnchorPointToOtherPoint(aAnchorPointX, aAnchorPointY, aOtherPoi
 
    if (aAnchorPointX < aOtherPointX):
       if (aAnchorPointY < aOtherPointY):
-         return new Rectangle(aAnchorPointX, aAnchorPointY, aOtherPointX, aOtherPointY)
+         return Rectangle(aAnchorPointX, aAnchorPointY, aOtherPointX, aOtherPointY)
       else:
       
-         return new Rectangle(aAnchorPointX, aOtherPointY, aOtherPointX, aAnchorPointY)
+         return Rectangle(aAnchorPointX, aOtherPointY, aOtherPointX, aAnchorPointY)
    else:
       if (aAnchorPointY < aOtherPointY):
-         return new Rectangle(aOtherPointX, aAnchorPointY, aAnchorPointX, aOtherPointY)
+         return Rectangle(aOtherPointX, aAnchorPointY, aAnchorPointX, aOtherPointY)
       else:
-         return new Rectangle(aOtherPointX, aOtherPointY, aAnchorPointX, aAnchorPointY)
+         return Rectangle(aOtherPointX, aOtherPointY, aAnchorPointX, aAnchorPointY)
 
    # FIXME maybe some weird circumstances to watch out for
 

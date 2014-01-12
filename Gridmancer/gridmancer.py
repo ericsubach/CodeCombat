@@ -146,6 +146,8 @@ def main():
    writeDebug('===================================')
    writeDebug('There are ' + str(len(kRectangles)) + ' rectangles = ' + str(kRectangles))
 
+   drawSolution(kGrid, kRectangles)
+
 #==============================================================================
 
 def myAddRectangle(aRectangles, aRectangle):
@@ -449,6 +451,29 @@ def rectangleFromAnchorPointToOtherPoint(aAnchorPointX, aAnchorPointY, aOtherPoi
 
    # FIXME maybe some weird circumstances to watch out for
 
+#==============================================================================
+
+def drawSolution(aGrid, aRectangles):
+   from Tkinter import *
+
+   tTileWidthPx = 30
+
+
+
+   tMaster = Tk()
+   w = Canvas(tMaster, width=600, height=600)
+   w.pack()
+
+   # The location that a square is drawn in assumed to be from the top-left to bottom-right.
+
+   for tY in xrange(len(aGrid)):
+      for tX in xrange(len(aGrid[0])):
+         tXPos = tX*tTileWidthPx
+         tYPos = tY*tTileWidthPx
+         w.create_rectangle(tXPos, tYPos, tXPos+tTileWidthPx, tYPos+tTileWidthPx, fill='blue', outline='black')
+
+
+   mainloop()
 #==============================================================================
 
 if __name__ == '__main__':

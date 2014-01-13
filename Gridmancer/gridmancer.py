@@ -44,6 +44,8 @@
 
 # ==============================================================================
 
+import itertools
+
 # Test data
 kIsTest = True
 
@@ -480,11 +482,14 @@ def drawSolution(aGrid, aRectangles):
    from Tkinter import *
 
    tTileWidthPx = 30
-
+   tColors = ['red', 'orange', 'yellow', 'green', 'blue', 'dark blue', 'violet']
+   tColorsCycle = itertools.cycle(tColors)
+   tColorWall      = 'slate gray'
+   tColorFreeSpace = 'gray'
 
 
    tMaster = Tk()
-   w = Canvas(tMaster, width=600, height=600)
+   w = Canvas(tMaster, width=700, height=700)
    w.pack()
 
    # The location that a square is drawn in assumed to be from the top-left to bottom-right.
@@ -494,9 +499,9 @@ def drawSolution(aGrid, aRectangles):
          tXPos = tX*tTileWidthPx
          tYPos = tY*tTileWidthPx
          if isWall(aGrid, tX, tY):
-            tColor = 'gray'
+            tColor = tColorWall
          else:
-            tColor = 'blue'
+            tColor = tColorFreeSpace
          w.create_rectangle(tXPos, tYPos, tXPos+tTileWidthPx, tYPos+tTileWidthPx, fill=tColor, outline='black')
 
    for tRectangle in aRectangles:
@@ -504,7 +509,7 @@ def drawSolution(aGrid, aRectangles):
       tYPos = tRectangle.y*tTileWidthPx
       tX2Pos = tRectangle.x2*tTileWidthPx + tTileWidthPx
       tY2Pos = tRectangle.y2*tTileWidthPx + tTileWidthPx
-      w.create_rectangle(tXPos, tYPos, tX2Pos, tY2Pos, fill='red', outline='black')
+      w.create_rectangle(tXPos, tYPos, tX2Pos, tY2Pos, fill=next(tColorsCycle), outline='black')
 
    mainloop()
 #==============================================================================

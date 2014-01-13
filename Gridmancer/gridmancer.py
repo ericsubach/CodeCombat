@@ -470,8 +470,18 @@ def drawSolution(aGrid, aRectangles):
       for tX in xrange(len(aGrid[0])):
          tXPos = tX*tTileWidthPx
          tYPos = tY*tTileWidthPx
-         w.create_rectangle(tXPos, tYPos, tXPos+tTileWidthPx, tYPos+tTileWidthPx, fill='blue', outline='black')
+         if isWall(aGrid, tX, tY):
+            tColor = 'gray'
+         else:
+            tColor = 'blue'
+         w.create_rectangle(tXPos, tYPos, tXPos+tTileWidthPx, tYPos+tTileWidthPx, fill=tColor, outline='black')
 
+   for tRectangle in aRectangles:
+      tXPos = tRectangle.x*tTileWidthPx
+      tYPos = tRectangle.y*tTileWidthPx
+      tX2Pos = tRectangle.x2*tTileWidthPx + tTileWidthPx
+      tY2Pos = tRectangle.y2*tTileWidthPx + tTileWidthPx
+      w.create_rectangle(tXPos, tYPos, tX2Pos, tY2Pos, fill='red', outline='black')
 
    mainloop()
 #==============================================================================

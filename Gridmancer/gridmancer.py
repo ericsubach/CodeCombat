@@ -506,12 +506,15 @@ def drawSolution(aGrid, aRectangles):
             tColor = tColorFreeSpace
          w.create_rectangle(tXPos, tYPos, tXPos+tTileWidthPx, tYPos+tTileWidthPx, fill=tColor, outline='black')
 
-   for tRectangle in aRectangles:
+   for tIdx, tRectangle in enumerate(aRectangles, start=1):
       tXPos = tRectangle.x*tTileWidthPx
       tYPos = tRectangle.y*tTileWidthPx
       tX2Pos = tRectangle.x2*tTileWidthPx + tTileWidthPx
       tY2Pos = tRectangle.y2*tTileWidthPx + tTileWidthPx
       w.create_rectangle(tXPos, tYPos, tX2Pos, tY2Pos, fill=next(tColorsCycle), outline='black')
+      tCenterXPos = tXPos + ((tX2Pos - tXPos) / 2)
+      tCenterYPos = tYPos + ((tY2Pos - tYPos) / 2)
+      w.create_text(tCenterXPos, tCenterYPos, text=str(tIdx))
 
    mainloop()
 #==============================================================================

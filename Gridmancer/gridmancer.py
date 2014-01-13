@@ -44,6 +44,10 @@
 
 # ==============================================================================
 
+# FIXME there are overlap problems with the rectangles. I think this is because
+#       I need to check when building rectangles that I'm not only avoiding walls,
+#       but avoiding squares that are taken by rectangles as well.
+
 import itertools
 import os
 

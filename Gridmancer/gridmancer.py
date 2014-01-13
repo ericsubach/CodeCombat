@@ -119,7 +119,7 @@ def getGrid():
             [ [],  [],  [],  [], [1], [1], [1],  [], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1], [1]],
          ]
 
-      return tTest3
+      return tLevel1
    else:
       # Flip the grid because my code uses a different coordinate system.
       #return this.transformedGrid(this.getNavGrid().grid);

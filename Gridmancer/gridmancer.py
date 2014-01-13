@@ -45,6 +45,7 @@
 # ==============================================================================
 
 import itertools
+import os
 
 # Test data
 kIsTest = True
@@ -169,7 +170,8 @@ def main():
    # At this point the entire grid should be filled with rectangles.
 
    writeDebug('===================================')
-   writeDebug('There are ' + str(len(kRectangles)) + ' rectangles = ' + str(kRectangles))
+   writeDebug('There are ' + str(len(kRectangles)))
+   writeDebug('rectangles = ' + os.linesep + os.linesep.join([str(tRectangle) for tRectangle in kRectangles]))
 
    drawSolution(kGrid, kRectangles)
 

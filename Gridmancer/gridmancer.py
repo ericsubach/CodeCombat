@@ -183,7 +183,7 @@ def main():
 #==============================================================================
 
 def myAddRectangle(aRectangles, aRectangle):
-   writeDebug('Adding rectangle = ' + str(aRectangle))
+   writeDebug('Adding rectangle #' + str(len(aRectangles)+1) + ' = ' + str(aRectangle))
    if not kIsTest:
       addRect(aRectangle.x + (aRectangle.width / 2),
               aRectangle.y + (aRectangle.height / 2),

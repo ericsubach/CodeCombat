@@ -466,7 +466,9 @@ class Quadrant(object):
 
 
 def rectangleFromAnchorPointToOtherPoint(aAnchorPointX, aAnchorPointY, aOtherPointX, aOtherPointY):
-   # Create a rectangle with the given two points so that the first point is the top-left corner.
+   '''
+   Create a rectangle with the given two points so that the first point is the top-left corner.
+   '''
 
    if (aAnchorPointX < aOtherPointX):
       if (aAnchorPointY < aOtherPointY):
@@ -488,7 +490,7 @@ def drawSolution(aGrid, aRectangles):
    from Tkinter import *
 
    tTileWidthPx = 30
-   tColors = ['red', 'orange', 'yellow', 'green', 'blue', 'dark blue', 'violet']
+   tColors = ['red', 'orange', 'yellow', 'green', 'beige', 'cadet blue', 'violet']
    tColorsCycle = itertools.cycle(tColors)
    tColorWall      = 'slate gray'
    tColorFreeSpace = 'gray'

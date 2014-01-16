@@ -370,7 +370,8 @@ def findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOtherVer
          if (isWall(aGrid, tX, tY) or not isNotTakenByRectangle(aRectangles, tX, tY)):
             #writeDebug('original min/max = ' + tVerticalMinOrMaxSoFar);
             #writeDebug('tY original = ' + tY);
-            tVerticalMinOrMaxSoFar = aVerticalMinOrMaxFunction(tVerticalMinOrMaxSoFar, tY - aSweepVertical) # looking back on the previous square. could be problamatic
+            tVerticalMinOrMaxSoFar = aVerticalMinOrMaxFunction(tVerticalMinOrMaxSoFar, tY)
+            writeDebug('the following point caused min/max = ' + '(' + str(tX) + ', ' + str(tY) + ')')
             break
          tY += aSweepVertical
 

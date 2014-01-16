@@ -49,6 +49,7 @@
 #       but avoiding squares that are taken by rectangles as well.
 import itertools
 import os
+import sys
 
 from Tkinter import *
 
@@ -177,6 +178,7 @@ def main():
    writeDebug('===================================')
    writeDebug('There are ' + str(len(kRectangles)))
    writeDebug('rectangles = ' + os.linesep + os.linesep.join([str(tRectangle) for tRectangle in kRectangles]))
+   sys.stdout.flush()
 
    drawSolution(kGrid, kRectangles)
 
@@ -355,6 +357,7 @@ def findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOtherVer
       raise Exception("Anchor point must not be a wall.")
 
    writeDebug('Finding all rectangles in quadrant between two points. [anchor = ' + str(aAnchorPoint) + '], [other = ' + str(aOtherVertexPoint) + ']')
+   writeDebug('aSweepHorizontal = ' + str(aSweepHorizontal) + ', aSweepVertical = ' + str(aSweepVertical))
 
    tVerticalMinOrMaxSoFar = aOtherVertexPoint.y
    tRectangles = []
@@ -373,6 +376,7 @@ def findAllRectsInQuadrantAvoidTaken(aGrid, aRectangles, aAnchorPoint, aOtherVer
 
       writeDebug('the vertical min/max is now = ' + str(tVerticalMinOrMaxSoFar))
       tRectangle = rectangleFromAnchorPointToOtherPoint(aAnchorPoint.x, aAnchorPoint.y, tX, tVerticalMinOrMaxSoFar - aSweepVertical)
+      writeDebug('creating rectangle from following info: ' + str(aAnchorPoint.x) + ', ' + str(aAnchorPoint.y) + ', ' + str(tX) + ', ' + str(tVerticalMinOrMaxSoFar - aSweepVertical))
       writeDebug('adding rectangle to quadrant = ' + str(tRectangle))
       tRectangles.append(tRectangle)
    

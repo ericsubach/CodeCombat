@@ -501,6 +501,7 @@ def drawSolution(aGrid, aRectangles):
 
    # The location that a square is drawn in assumed to be from the top-left to bottom-right.
 
+   # Draw grid.
    for tY in xrange(len(aGrid)):
       for tX in xrange(len(aGrid[0])):
          tXPos = tX*tTileWidthPx
@@ -511,6 +512,13 @@ def drawSolution(aGrid, aRectangles):
             tColor = tColorFreeSpace
          w.create_rectangle(tXPos, tYPos, tXPos+tTileWidthPx, tYPos+tTileWidthPx, fill=tColor, outline='black')
 
+   # Draw cell numbers.
+   for tY in xrange(len(aGrid)):
+      w.create_text((len(aGrid[0]))*tTileWidthPx + tTileWidthPx/2, tY*tTileWidthPx + tTileWidthPx/2, text=str(tY))
+   for tX in xrange(len(aGrid[0])):
+      w.create_text(tX*tTileWidthPx + tTileWidthPx/2, len(aGrid)*tTileWidthPx + tTileWidthPx/2, text=str(tX))
+
+   # Draw rectangles.
    for tIdx, tRectangle in enumerate(aRectangles, start=1):
       tXPos = tRectangle.x*tTileWidthPx
       tYPos = tRectangle.y*tTileWidthPx

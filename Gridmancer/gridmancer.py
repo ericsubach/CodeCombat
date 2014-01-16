@@ -47,9 +47,10 @@
 # FIXME there are overlap problems with the rectangles. I think this is because
 #       I need to check when building rectangles that I'm not only avoiding walls,
 #       but avoiding squares that are taken by rectangles as well.
-
 import itertools
 import os
+
+from Tkinter import *
 
 # Test data
 kIsTest = True
@@ -487,8 +488,6 @@ def rectangleFromAnchorPointToOtherPoint(aAnchorPointX, aAnchorPointY, aOtherPoi
 #==============================================================================
 
 def drawSolution(aGrid, aRectangles):
-   from Tkinter import *
-
    tTileWidthPx = 30
    tColors = ['red', 'orange', 'yellow', 'green', 'beige', 'cadet blue', 'violet']
    tColorsCycle = itertools.cycle(tColors)
